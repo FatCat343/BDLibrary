@@ -32,7 +32,7 @@ CREATE TABLE book
 (
     book_id        integer NOT NULL,
     publication_id integer NOT NULL,
-    genre          varchar NOT NULL,
+    genre          varchar(50) NOT NULL,
     CONSTRAINT PK_book PRIMARY KEY ( book_id ),
     CONSTRAINT FK_publication FOREIGN KEY ( publication_id ) REFERENCES publication ( publication_id )
 );
@@ -48,11 +48,11 @@ CREATE TABLE edition
 (
     edition_id     integer NOT NULL,
     usage_type     varchar(50) NOT NULL,
-    position       integer NOT NULL,
+    position_id       integer NOT NULL,
     publication_id integer NOT NULL,
     CONSTRAINT PK_edition PRIMARY KEY ( edition_id ),
     CONSTRAINT FK_publication FOREIGN KEY ( publication_id ) REFERENCES publication ( publication_id ),
-    CONSTRAINT FK_position FOREIGN KEY ( position ) REFERENCES bookPosition ( position_id )
+    CONSTRAINT FK_position FOREIGN KEY ( position_id ) REFERENCES bookPosition ( position_id )
 );
 CREATE TABLE indoor
 (
