@@ -1,4 +1,4 @@
-package com.bdcourse.library.book;
+package com.bdcourse.library.publication.book;
 
 import javax.persistence.*;
 import java.io.Serializable;
