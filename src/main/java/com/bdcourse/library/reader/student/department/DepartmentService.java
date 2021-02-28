@@ -11,9 +11,7 @@ public class DepartmentService {
     private DepartmentRepository departmentRepository;
 
     public List<Department> findAll() {
-        List<Department> res =  (List<Department>) departmentRepository.findAll();
-        System.out.println(res);
-        return res;
+        return (List<Department>) departmentRepository.findAll();
     }
 
 }

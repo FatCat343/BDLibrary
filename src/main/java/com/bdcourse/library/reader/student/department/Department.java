@@ -8,13 +8,13 @@ import java.io.Serializable;
 public class Department implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    @Column(name = "department_id", nullable = false)
+    @Column(name = "department_id", nullable = false, updatable = false)
     private Integer id;
 
-    @Column
+    @Column(nullable = false, updatable = false)
     private String faculty;
 
-    @Column
+    @Column(nullable = false, updatable = false)
     private String university;
 
     public Integer getId() {
