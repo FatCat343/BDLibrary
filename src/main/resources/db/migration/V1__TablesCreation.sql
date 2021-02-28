@@ -69,7 +69,7 @@ CREATE TABLE dissertation
 CREATE TABLE edition
 (
     edition_id     integer NOT NULL,
-    usage_type     varchar(50) NOT NULL,
+    edition_code   integer NOT NULL,
     position_id    integer NOT NULL,
     publication_id integer NOT NULL,
     date_arrived   date NOT NULL,
