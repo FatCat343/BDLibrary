@@ -8,9 +8,8 @@ import java.io.Serializable;
 
 @Entity
 @Table(name = "student")
-public class Student implements Serializable {
-    @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+public class Student extends Reader {
+
     @Column(name = "student_id", updatable = false, nullable = false)
     private Integer id;
 
@@ -18,17 +17,15 @@ public class Student implements Serializable {
     @JoinColumn(name = "department_id")
     private Department department;
 
-    @Column(name = "student_code", updatable = false, nullable = false)
+    @Column(name = "student_code", nullable = false)
     private Integer code;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "reader_id")
-    private Reader reader;
-
+    @Override
     public Integer getId() {
         return id;
     }
 
+    @Override
     public void setId(Integer id) {
         this.id = id;
     }
@@ -49,11 +46,5 @@ public class Student implements Serializable {
         this.code = code;
     }
 
-    public Reader getReader() {
-        return reader;
-    }
 
-    public void setReader(Reader reader) {
-        this.reader = reader;
-    }
 }

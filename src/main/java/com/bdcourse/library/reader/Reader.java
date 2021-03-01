@@ -6,6 +6,7 @@ import javax.persistence.*;
 import java.io.Serializable;
 
 @Entity
+@Inheritance(strategy = InheritanceType.JOINED)
 @Table(name = "reader")
 public class Reader implements Serializable {
     @Id
@@ -13,10 +14,10 @@ public class Reader implements Serializable {
     @Column(name = "reader_id", nullable = false, updatable = false)
     private Integer id;
 
-    @Column(name = "firstname", updatable = false, nullable = false)
+    @Column(name = "firstname", nullable = false)
     private String firstName;
 
-    @Column(name = "lastname", updatable = false, nullable = false)
+    @Column(name = "lastname", nullable = false)
     private String lastName;
 
     @ManyToOne(fetch = FetchType.LAZY)

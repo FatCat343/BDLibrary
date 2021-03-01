@@ -9,9 +9,8 @@ import java.io.Serializable;
 
 @Entity
 @Table(name = "worker")
-public class Worker implements Serializable {
-    @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+public class Worker extends Reader {
+
     @Column(name = "worker_id", nullable = false, updatable = false)
     private Integer id;
 
@@ -23,9 +22,6 @@ public class Worker implements Serializable {
     @JoinColumn(name = "profession_id")
     private Profession profession;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "reader_id")
-    private Reader reader;
 
     public Integer getId() {
         return id;
@@ -51,11 +47,4 @@ public class Worker implements Serializable {
         this.profession = profession;
     }
 
-    public Reader getReader() {
-        return reader;
-    }
-
-    public void setReader(Reader reader) {
-        this.reader = reader;
-    }
 }
