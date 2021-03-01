@@ -13,7 +13,7 @@ public class Student extends Reader {
     @Column(name = "student_id", updatable = false, nullable = false)
     private Integer id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "department_id")
     private Department department;
 

@@ -20,7 +20,7 @@ public class Reader implements Serializable {
     @Column(name = "lastname", nullable = false)
     private String lastName;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "assigned_library_id")
     private Library library;
 
