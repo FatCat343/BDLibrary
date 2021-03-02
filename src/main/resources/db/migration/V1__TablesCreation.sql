@@ -99,9 +99,9 @@ CREATE TABLE reader
     reader_id           integer NOT NULL,
     firstName           varchar(50) NOT NULL,
     lastName            varchar(50) NOT NULL,
-    assigned_library_id integer NOT NULL,
+    library_id integer NOT NULL,
     CONSTRAINT PK_reader PRIMARY KEY ( reader_id ),
-    CONSTRAINT FK_library FOREIGN KEY ( assigned_library_id ) REFERENCES library ( library_id )
+    CONSTRAINT FK_library FOREIGN KEY ( library_id ) REFERENCES library ( library_id )
 );
 CREATE TABLE department
 (

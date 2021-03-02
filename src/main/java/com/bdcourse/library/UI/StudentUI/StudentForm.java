@@ -12,6 +12,8 @@ import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
+import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.component.textfield.NumberField;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.data.binder.ValidationException;
@@ -19,12 +21,12 @@ import com.vaadin.flow.data.converter.StringToIntegerConverter;
 import com.vaadin.flow.shared.Registration;
 
 
-public class StudentForm extends FormLayout {
-    TextField firstName = new TextField();
-    TextField lastName = new TextField();
-    TextField code = new TextField();
-    ComboBox<Department> department = new ComboBox<>("department");
-    ComboBox<Library> library = new ComboBox<>("library");
+public class StudentForm extends VerticalLayout {
+    TextField firstName = new TextField("FirstName");
+    TextField lastName = new TextField("LastName");
+    NumberField code = new NumberField("Student Code");
+    ComboBox<Department> department = new ComboBox<>("Department");
+    ComboBox<Library> library = new ComboBox<>("Library");
 
     Button save = new Button("save");
     Button delete = new Button("delete");
@@ -35,14 +37,14 @@ public class StudentForm extends FormLayout {
 
     public StudentForm(DepartmentService departmentService, LibraryService libraryService) {
         addClassName("student-form");
-        studentBinder.forField(code).withConverter(new StringToIntegerConverter("Enter code"))
-                .bind(Student::getCode, Student::setCode);
+        studentBinder.forField(code).withConverter(new DoubleToIntegerConverter()).bind(Student::getCode, Student::setCode);
         studentBinder.bindInstanceFields(this);
 
         department.setItems(departmentService.findAll());
         library.setItems(libraryService.findAll());
 
         add(createFieldsLayout(), createButtonsLayout());
+
     }
 
     private HorizontalLayout createFieldsLayout() {

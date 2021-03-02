@@ -10,24 +10,25 @@ import java.io.Serializable;
 @Table(name = "student")
 public class Student extends Reader {
 
-    @Column(name = "student_id", updatable = false, nullable = false)
-    private Integer id;
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "gen2")
+    @SequenceGenerator(name = "gen2", initialValue = 50, schema = "library_schema")
+    @Column(name = "student_id")
+    private Integer student_id;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
     @JoinColumn(name = "department_id")
     private Department department;
 
-    @Column(name = "student_code", nullable = false)
+    @Column(name = "student_code")
     private Integer code;
 
-    @Override
-    public Integer getId() {
-        return id;
+
+    public Integer getStudent_id() {
+        return student_id;
     }
 
-    @Override
-    public void setId(Integer id) {
-        this.id = id;
+    public void setStudent_id(Integer student_id) {
+        this.student_id = student_id;
     }
 
     public Department getDepartment() {
@@ -46,5 +47,12 @@ public class Student extends Reader {
         this.code = code;
     }
 
+    public Student() {
+    }
+
+    public Student(Integer code) {
+        super();
+        this.code = code;
+    }
 
 }

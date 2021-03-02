@@ -7,10 +7,12 @@ import com.bdcourse.library.reader.student.Student;
 import com.bdcourse.library.reader.student.StudentService;
 import com.bdcourse.library.reader.student.department.Department;
 import com.bdcourse.library.reader.student.department.DepartmentService;
+import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.grid.HeaderRow;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.component.textfield.NumberField;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.provider.ConfigurableFilterDataProvider;
 import com.vaadin.flow.data.provider.DataProvider;
@@ -31,12 +33,12 @@ public class StudentView extends VerticalLayout {
 
     private TextField firstName = new TextField();
     private TextField lastName = new TextField();
-    private TextField code = new TextField();
+    private NumberField code = new NumberField();
     private TextField library = new TextField();
     private TextField department = new TextField();
     private StudentForm form;
 
-    DataProvider<Student, StudentFilter> dataProvider;
+    ConfigurableFilterDataProvider<Student, Void, StudentFilter> customDataProvider;
     StudentFilter studentFilter;
 
     public StudentView(StudentService studentService, LibraryService libraryService, DepartmentService departmentService) {
@@ -44,8 +46,8 @@ public class StudentView extends VerticalLayout {
         studentFilter = new StudentFilter();
         addClassName("student-view");
         setSizeFull();
-        dataProvider = createDataProvider(studentService);
-        ConfigurableFilterDataProvider<Student, Void, StudentFilter> customDataProvider = dataProvider.withConfigurableFilter();
+        DataProvider<Student, StudentFilter> dataProvider = createDataProvider(studentService);
+        customDataProvider = dataProvider.withConfigurableFilter();
         customDataProvider.setFilter(studentFilter);
         HorizontalLayout toolbar = configureToolBar();
         configureGrid();
@@ -53,7 +55,6 @@ public class StudentView extends VerticalLayout {
         form.addListener(StudentForm.saveEvent.class, this::saveStudent);
         form.addListener(StudentForm.deleteEvent.class, this::deleteStudent);
         form.addListener(StudentForm.closeEvent.class, e -> closeEditor());
-
         add(toolbar, form, grid);
 
         closeEditor();
@@ -62,32 +63,49 @@ public class StudentView extends VerticalLayout {
     private HorizontalLayout configureToolBar() {
         configureFilter(firstName, "FirstName filter");
         configureFilter(lastName, "LastName Filter");
-        configureFilter(code, "Student Code Filter");
         configureFilter(library, "Library Address Filter");
         configureFilter(department, "Department Filter");
 
+        code.setPlaceholder("Code Filter");
+        code.setClearButtonVisible(true);
+        code.setValueChangeMode(ValueChangeMode.LAZY);
+
         firstName.addValueChangeListener(event -> {
-            studentFilter.setFirstName(event.getValue());
-            dataProvider.refreshAll();
+            if ((event.getValue() != null) && (!event.getValue().equals(""))) studentFilter.setFirstName(event.getValue());
+            else studentFilter.setFirstName(null);
+            customDataProvider.refreshAll();
         });
         lastName.addValueChangeListener(event -> {
-            studentFilter.setLastName(event.getValue());
-            dataProvider.refreshAll();
+            if ((event.getValue() != null) && (!event.getValue().equals(""))) studentFilter.setLastName(event.getValue());
+            else studentFilter.setLastName(null);
+            customDataProvider.refreshAll();
         });
         code.addValueChangeListener(event -> {
-            studentFilter.setCode(event.getValue());
-            dataProvider.refreshAll();
+            if (event.getValue() != null) studentFilter.setCode(String.valueOf(event.getValue().intValue()));
+            else studentFilter.setCode(null);
+            customDataProvider.refreshAll();
         });
         library.addValueChangeListener(event -> {
-            studentFilter.setLibrary(event.getValue());
-            dataProvider.refreshAll();
+            if ((event.getValue() != null) && (!event.getValue().equals(""))) studentFilter.setLibrary(event.getValue());
+            else studentFilter.setLibrary(null);
+            customDataProvider.refreshAll();
         });
         department.addValueChangeListener(event -> {
-            studentFilter.setDepartment(event.getValue());
-            dataProvider.refreshAll();
+            if ((event.getValue() != null) && (!event.getValue().equals(""))) studentFilter.setDepartment(event.getValue());
+            else studentFilter.setDepartment(null);
+
+            customDataProvider.refreshAll();
         });
 
-        return new HorizontalLayout(firstName, lastName, code, library, department);
+        Button addStudentButton = new Button("Add Student");
+        addStudentButton.addClickListener(click -> addStudent());
+
+        return new HorizontalLayout(firstName, lastName, code, department, library, addStudentButton);
+    }
+
+    void addStudent() {
+        grid.asSingleSelect().clear();
+        editStudent(new Student(0));
     }
 
     private void configureFilter(TextField field, String name) {
@@ -100,19 +118,19 @@ public class StudentView extends VerticalLayout {
         grid.addClassName("student-grid");
         grid.setSizeFull();
         grid.removeAllColumns();
+        grid.addColumn(Student::getFirstName).setHeader("FirstName").setSortProperty("firstName");
+        grid.addColumn(Student::getLastName).setHeader("LastName").setSortProperty("lastName");
+        grid.addColumn(Student::getCode).setHeader("Code").setSortProperty("code");
         grid.addColumn(student -> {
             Department d = student.getDepartment();
             return d.getUniversity() + ", " + d.getFaculty();
         }).setHeader("Department").setSortProperty("department");
-        grid.addColumn(Student::getFirstName).setHeader("FirstName").setSortProperty("firstname");
-        grid.addColumn(Student::getLastName).setHeader("LastName").setSortProperty("lastname");
-        grid.addColumn(Student::getCode).setHeader("Code").setSortProperty("code");
         grid.addColumn(student -> {
             Library l = student.getLibrary();
             return l.getAddress();
         }).setHeader("Assigned Library").setSortProperty("library");
         grid.setPageSize(10);
-        grid.setDataProvider(dataProvider);
+        grid.setDataProvider(customDataProvider);
 
         grid.asSingleSelect().addValueChangeListener(event -> editStudent(event.getValue()));
     }
@@ -126,13 +144,13 @@ public class StudentView extends VerticalLayout {
 
     private void saveStudent(StudentForm.saveEvent event) {
         Student student = studentService.save(event.getStudent());
-        dataProvider.refreshItem(student);
+        customDataProvider.refreshItem(student);
         closeEditor();
     }
 
     private void deleteStudent(StudentForm.deleteEvent event) {
         studentService.delete(event.getStudent());
-        dataProvider.refreshAll();
+        customDataProvider.refreshAll();
         closeEditor();
     }
 
@@ -170,7 +188,8 @@ public class StudentView extends VerticalLayout {
 
                 query -> {
                     Optional<StudentFilter> filter = query.getFilter();
-                    return (int) getStudentService().getStudentCount(filter.map(f -> f.getFirstName()).orElse(null),
+                    return (int) getStudentService().getStudentCount(
+                            filter.map(f -> f.getFirstName()).orElse(null),
                             filter.map(f -> f.getLastName()).orElse(null),
                             filter.map(f -> f.getCode()).orElse(null),
                             filter.map(f -> f.getLibrary()).orElse(null),

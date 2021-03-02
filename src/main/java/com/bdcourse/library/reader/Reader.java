@@ -10,18 +10,19 @@ import java.io.Serializable;
 @Table(name = "reader")
 public class Reader implements Serializable {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    @Column(name = "reader_id", nullable = false, updatable = false)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "gen1")
+    @SequenceGenerator(name = "gen1", initialValue = 50, schema = "library_schema")
+    @Column(name = "reader_id")
     private Integer id;
 
-    @Column(name = "firstname", nullable = false)
+    @Column(name = "firstname")
     private String firstName;
 
-    @Column(name = "lastname", nullable = false)
+    @Column(name = "lastname")
     private String lastName;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "assigned_library_id")
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
+    @JoinColumn(name = "library_id")
     private Library library;
 
     public Integer getId() {
