@@ -13,6 +13,7 @@ import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.component.textfield.IntegerField;
 import com.vaadin.flow.component.textfield.NumberField;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.Binder;
@@ -24,7 +25,7 @@ import com.vaadin.flow.shared.Registration;
 public class StudentForm extends VerticalLayout {
     TextField firstName = new TextField("FirstName");
     TextField lastName = new TextField("LastName");
-    NumberField code = new NumberField("Student Code");
+    IntegerField code = new IntegerField("Student Code");
     ComboBox<Department> department = new ComboBox<>("Department");
     ComboBox<Library> library = new ComboBox<>("Library");
 
@@ -37,8 +38,19 @@ public class StudentForm extends VerticalLayout {
 
     public StudentForm(DepartmentService departmentService, LibraryService libraryService) {
         addClassName("student-form");
-        studentBinder.forField(code).withConverter(new DoubleToIntegerConverter()).bind(Student::getCode, Student::setCode);
+        //studentBinder.forField(code).withConverter(new DoubleToIntegerConverter()).bind(Student::getCode, Student::setCode);
         studentBinder.bindInstanceFields(this);
+        studentBinder.forField(code)
+                .withValidator(min -> min >= 100000000 && min <= 999999999, "Require 9 characters")
+                .bind(Student::getCode, Student::setCode);
+        studentBinder.forField(firstName)
+                .withValidator(min -> min.length() >= 1, "Minimum 1 letter")
+                .withValidator(max -> max.length() <= 20, "Maximum 10 letters")
+                .bind(Student::getFirstName, Student::setFirstName);
+        studentBinder.forField(lastName)
+                .withValidator(min -> min.length() >= 1, "Minimum 1 letter")
+                .withValidator(max -> max.length() <= 20, "Maximum 10 letters")
+                .bind(Student::getLastName, Student::setLastName);
 
         department.setItems(departmentService.findAll());
         library.setItems(libraryService.findAll());

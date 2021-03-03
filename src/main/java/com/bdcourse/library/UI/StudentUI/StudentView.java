@@ -12,6 +12,7 @@ import com.vaadin.flow.component.grid.HeaderRow;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.component.textfield.IntegerField;
 import com.vaadin.flow.component.textfield.NumberField;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.provider.ConfigurableFilterDataProvider;
@@ -33,7 +34,7 @@ public class StudentView extends VerticalLayout {
 
     private TextField firstName = new TextField();
     private TextField lastName = new TextField();
-    private NumberField code = new NumberField();
+    private IntegerField code = new IntegerField();
     private TextField library = new TextField();
     private TextField department = new TextField();
     private StudentForm form;
@@ -81,7 +82,7 @@ public class StudentView extends VerticalLayout {
             customDataProvider.refreshAll();
         });
         code.addValueChangeListener(event -> {
-            if (event.getValue() != null) studentFilter.setCode(String.valueOf(event.getValue().intValue()));
+            if (event.getValue() != null) studentFilter.setCode(String.valueOf(event.getValue()));
             else studentFilter.setCode(null);
             customDataProvider.refreshAll();
         });
@@ -105,7 +106,7 @@ public class StudentView extends VerticalLayout {
 
     void addStudent() {
         grid.asSingleSelect().clear();
-        editStudent(new Student(0));
+        editStudent(new Student());
     }
 
     private void configureFilter(TextField field, String name) {

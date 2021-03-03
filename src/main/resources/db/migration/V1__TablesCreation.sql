@@ -112,11 +112,11 @@ CREATE TABLE department
 );
 CREATE TABLE student
 (
-    student_id      integer NOT NULL,
+    reader_id      integer NOT NULL,
     department_id   integer NOT NULL,
     student_code    integer NOT NULL,
-    reader_id       integer NOT NULL,
-    CONSTRAINT PK_student PRIMARY KEY ( student_id ),
+    --reader_id       integer NOT NULL,
+    CONSTRAINT PK_student PRIMARY KEY ( reader_id ),
     CONSTRAINT FK_reader FOREIGN KEY ( reader_id ) REFERENCES reader ( reader_id ),
     CONSTRAINT FK_department FOREIGN KEY (department_id) REFERENCES department(department_id)
 );
