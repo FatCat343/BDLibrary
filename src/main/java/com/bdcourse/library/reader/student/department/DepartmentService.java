@@ -14,4 +14,11 @@ public class DepartmentService {
         return (List<Department>) departmentRepository.findAll();
     }
 
+    public void save(Department department) {
+        departmentRepository.save(department);
+    }
+
+    public void delete(Department department) {
+        departmentRepository.delete(department);
+    }
 }

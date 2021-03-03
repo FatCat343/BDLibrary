@@ -5,6 +5,7 @@ import com.bdcourse.library.library.LibraryService;
 import com.bdcourse.library.reader.student.Student;
 import com.bdcourse.library.reader.student.department.Department;
 import com.bdcourse.library.reader.student.department.DepartmentService;
+import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.ComponentEvent;
 import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.button.Button;
@@ -33,34 +34,68 @@ public class StudentForm extends VerticalLayout {
     Button delete = new Button("delete");
     Button close = new Button("close");
 
+    private DepartmentForm departmentForm;
+    private DepartmentService departmentService;
+
     Binder<Student> studentBinder = new Binder<>(Student.class);
     private Student student;
 
     public StudentForm(DepartmentService departmentService, LibraryService libraryService) {
         addClassName("student-form");
+        this.departmentService = departmentService;
         //studentBinder.forField(code).withConverter(new DoubleToIntegerConverter()).bind(Student::getCode, Student::setCode);
         studentBinder.bindInstanceFields(this);
         studentBinder.forField(code)
-                .withValidator(min -> min >= 100000000 && min <= 999999999, "Require 9 characters")
+                .withValidator(min -> min != null && min >= 100000000 && min <= 999999999, "Require 9 characters")
                 .bind(Student::getCode, Student::setCode);
         studentBinder.forField(firstName)
                 .withValidator(min -> min.length() >= 1, "Minimum 1 letter")
-                .withValidator(max -> max.length() <= 20, "Maximum 10 letters")
+                .withValidator(max -> max.length() <= 20, "Maximum 20 letters")
                 .bind(Student::getFirstName, Student::setFirstName);
         studentBinder.forField(lastName)
                 .withValidator(min -> min.length() >= 1, "Minimum 1 letter")
-                .withValidator(max -> max.length() <= 20, "Maximum 10 letters")
+                .withValidator(max -> max.length() <= 20, "Maximum 20 letters")
                 .bind(Student::getLastName, Student::setLastName);
 
         department.setItems(departmentService.findAll());
         library.setItems(libraryService.findAll());
 
-        add(createFieldsLayout(), createButtonsLayout());
+        departmentForm = new DepartmentForm(departmentService);
+        departmentForm.addListener(DepartmentForm.saveEvent.class,  this::saveDepartment);
+        departmentForm.addListener(DepartmentForm.deleteEvent.class,  this::deleteDepartment);
+        departmentForm.addListener(DepartmentForm.closeEvent.class, e -> closeEditor());
 
+        add(createFieldsLayout(), createButtonsLayout(), departmentForm);
+
+        closeEditor();
+    }
+
+    private void closeEditor() {
+        departmentForm.setDepartment(null);
+        departmentForm.setVisible(false);
+    }
+
+    private void saveDepartment(DepartmentForm.saveEvent event) {
+        departmentService.save(event.getDepartment());
+        this.department.setItems(departmentService.findAll());
+        closeEditor();
+    }
+
+    private void deleteDepartment(DepartmentForm.deleteEvent event) {
+        departmentService.delete(event.getDepartment());
+        this.department.setItems(departmentService.findAll());
+        closeEditor();
     }
 
     private HorizontalLayout createFieldsLayout() {
-        return new HorizontalLayout(firstName, lastName, code, department, library);
+        Button addDepartmentButton = new Button("Add Department");
+        addDepartmentButton.addClickListener(click -> addDepartment());
+        return new HorizontalLayout(firstName, lastName, code, department, library, addDepartmentButton);
+    }
+
+    private void addDepartment() {
+        departmentForm.setDepartment(new Department());
+        departmentForm.setVisible(true);
     }
 
     private HorizontalLayout createButtonsLayout() {
