@@ -1,44 +1,23 @@
 package com.bdcourse.library.publication.book;
 
+import com.bdcourse.library.publication.Publication;
+import com.bdcourse.library.publication.book.category.Category;
+
 import javax.persistence.*;
 import java.io.Serializable;
 
 @Entity
 @Table(name = "book")
-public class book implements Serializable {
-    @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_gen_book")
-    @SequenceGenerator(name = "seq_gen_book", sequenceName = "seq_book")
-    @Column(name = "book_id")
-    private Integer book_id;
+public class book extends Publication {
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "category_id")
+    private Category category;
 
-    @Column(name = "publication_id")
-    private Integer publication_id;
-
-    @Column(name = "genre")
-    private String genre;
-
-    public Integer getBook_id() {
-        return book_id;
+    public Category getCategory() {
+        return category;
     }
 
-    public void setBook_id(Integer book_id) {
-        this.book_id = book_id;
-    }
-
-    public Integer getPublication_id() {
-        return publication_id;
-    }
-
-    public void setPublication_id(Integer publication_id) {
-        this.publication_id = publication_id;
-    }
-
-    public String getGenre() {
-        return genre;
-    }
-
-    public void setGenre(String genre) {
-        this.genre = genre;
+    public void setCategory(Category category) {
+        this.category = category;
     }
 }

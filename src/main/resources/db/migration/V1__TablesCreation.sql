@@ -44,10 +44,10 @@ CREATE TABLE category
 );
 CREATE TABLE book
 (
-    book_id              integer NOT NULL,
+    --book_id              integer NOT NULL,
     publication_id       integer NOT NULL,
     category_id          integer NOT NULL,
-    CONSTRAINT PK_book PRIMARY KEY ( book_id ),
+    CONSTRAINT PK_book PRIMARY KEY ( publication_id ),
     CONSTRAINT FK_publication FOREIGN KEY ( publication_id ) REFERENCES publication ( publication_id ),
     CONSTRAINT FK_category FOREIGN KEY ( category_id ) REFERENCES category ( category_id )
 );
@@ -59,10 +59,10 @@ CREATE TABLE subject
 );
 CREATE TABLE dissertation
 (
-    dissertation_id     integer NOT NULL,
+    --dissertation_id     integer NOT NULL,
     publication_id      integer NOT NULL,
     subject_id          integer NOT NULL,
-    CONSTRAINT PK_dissertation PRIMARY KEY ( dissertation_id ),
+    CONSTRAINT PK_dissertation PRIMARY KEY ( publication_id ),
     CONSTRAINT FK_publication FOREIGN KEY ( publication_id ) REFERENCES publication ( publication_id ),
     CONSTRAINT FK_subject FOREIGN KEY ( subject_id ) REFERENCES subject ( subject_id )
 );
@@ -80,18 +80,18 @@ CREATE TABLE edition
 );
 CREATE TABLE indoor
 (
-    indoor_id                     integer NOT NULL,
+    edition_id                     integer NOT NULL,
     reason_for_indoor_usage_only  text NOT NULL,
-    edition_id                    integer NOT NULL,
-    CONSTRAINT PK_indoor PRIMARY KEY ( indoor_id ),
+    --edition_id                    integer NOT NULL,
+    CONSTRAINT PK_indoor PRIMARY KEY ( edition_id ),
     CONSTRAINT FK_edition FOREIGN KEY ( edition_id ) REFERENCES edition ( edition_id )
 );
 CREATE TABLE outdoor
 (
-    outdoor_id    integer NOT NULL,
-    rental_period interval NOT NULL,
-    edition_id    integer NOT NULL,
-    CONSTRAINT PK_outdoor PRIMARY KEY ( outdoor_id ),
+    edition_id      integer NOT NULL,
+    rental_period   interval NOT NULL,
+    --edition_id      integer NOT NULL,
+    CONSTRAINT PK_outdoor PRIMARY KEY ( edition_id ),
     CONSTRAINT FK_edition FOREIGN KEY ( edition_id ) REFERENCES edition ( edition_id )
 );
 CREATE TABLE reader
@@ -99,7 +99,7 @@ CREATE TABLE reader
     reader_id           integer NOT NULL,
     firstName           varchar(50) NOT NULL,
     lastName            varchar(50) NOT NULL,
-    library_id integer NOT NULL,
+    library_id          integer NOT NULL,
     CONSTRAINT PK_reader PRIMARY KEY ( reader_id ),
     CONSTRAINT FK_library FOREIGN KEY ( library_id ) REFERENCES library ( library_id )
 );
@@ -134,11 +134,11 @@ CREATE TABLE profession
 );
 CREATE TABLE worker
 (
-    worker_id           integer NOT NULL,
+    reader_id           integer NOT NULL,
     company_id          integer NOT NULL,
     profession_id       integer NOT NULL,
-    reader_id           integer NOT NULL,
-    CONSTRAINT PK_worker PRIMARY KEY ( worker_id ),
+    --reader_id           integer NOT NULL,
+    CONSTRAINT PK_worker PRIMARY KEY ( reader_id ),
     CONSTRAINT FK_reader FOREIGN KEY ( reader_id ) REFERENCES reader ( reader_id ),
     CONSTRAINT FK_company FOREIGN KEY (company_id) REFERENCES company (company_id),
     CONSTRAINT FK_profession FOREIGN KEY (profession_id) REFERENCES profession(profession_id)

@@ -11,25 +11,15 @@ import java.io.Serializable;
 @Table(name = "worker")
 public class Worker extends Reader {
 
-    @Column(name = "worker_id", nullable = false, updatable = false)
-    private Integer id;
-
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "company_id")
     private Company company;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "profession_id")
     private Profession profession;
 
 
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
 
     public Company getCompany() {
         return company;

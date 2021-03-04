@@ -7,11 +7,11 @@ import java.io.Serializable;
 @Table(name = "company")
 public class Company implements Serializable {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    @Column(name = "company_id", nullable = false, updatable = false)
+    @SequenceGenerator(name = "company_generator", sequenceName = "company_seq", initialValue = 50)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "company_generator")
+    @Column(name = "company_id")
     private Integer id;
 
-    @Column(nullable = false, updatable = false)
     private String name;
 
     public Integer getId() {

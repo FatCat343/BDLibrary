@@ -8,11 +8,11 @@ import java.io.Serializable;
 @Table(name = "profession")
 public class Profession implements Serializable {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    @Column(name = "profession_id", nullable = false, updatable = false)
+    @SequenceGenerator(name = "profession_generator", sequenceName = "profession_seq", initialValue = 50)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "profession_generator")
+    @Column(name = "profession_id")
     private Integer id;
 
-    @Column(nullable = false, updatable = false)
     private String name;
 
     public Integer getId() {
