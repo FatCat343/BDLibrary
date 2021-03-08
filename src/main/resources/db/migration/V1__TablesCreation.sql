@@ -48,7 +48,7 @@ CREATE TABLE book
     publication_id       integer NOT NULL,
     category_id          integer NOT NULL,
     CONSTRAINT PK_book PRIMARY KEY ( publication_id ),
-    CONSTRAINT FK_publication FOREIGN KEY ( publication_id ) REFERENCES publication ( publication_id ),
+    CONSTRAINT FK_publication FOREIGN KEY ( publication_id ) REFERENCES publication ( publication_id ) ON DELETE CASCADE,
     CONSTRAINT FK_category FOREIGN KEY ( category_id ) REFERENCES category ( category_id ) ON DELETE CASCADE
 );
 CREATE TABLE subject
@@ -63,8 +63,8 @@ CREATE TABLE dissertation
     publication_id      integer NOT NULL,
     subject_id          integer NOT NULL,
     CONSTRAINT PK_dissertation PRIMARY KEY ( publication_id ),
-    CONSTRAINT FK_publication FOREIGN KEY ( publication_id ) REFERENCES publication ( publication_id ),
-    CONSTRAINT FK_subject FOREIGN KEY ( subject_id ) REFERENCES subject ( subject_id )
+    CONSTRAINT FK_publication FOREIGN KEY ( publication_id ) REFERENCES publication ( publication_id ) ON DELETE CASCADE,
+    CONSTRAINT FK_subject FOREIGN KEY ( subject_id ) REFERENCES subject ( subject_id ) ON DELETE CASCADE
 );
 CREATE TABLE edition
 (
@@ -75,8 +75,8 @@ CREATE TABLE edition
     date_arrived   date NOT NULL,
     date_left      date,
     CONSTRAINT PK_edition PRIMARY KEY ( edition_id ),
-    CONSTRAINT FK_publication FOREIGN KEY ( publication_id ) REFERENCES publication ( publication_id ),
-    CONSTRAINT FK_position FOREIGN KEY ( position_id ) REFERENCES bookPosition ( position_id )
+    CONSTRAINT FK_publication FOREIGN KEY ( publication_id ) REFERENCES publication ( publication_id ) ON DELETE CASCADE,
+    CONSTRAINT FK_position FOREIGN KEY ( position_id ) REFERENCES bookPosition ( position_id ) ON DELETE CASCADE
 );
 CREATE TABLE indoor
 (
@@ -84,7 +84,7 @@ CREATE TABLE indoor
     reason_for_indoor_usage_only  text NOT NULL,
     --edition_id                    integer NOT NULL,
     CONSTRAINT PK_indoor PRIMARY KEY ( edition_id ),
-    CONSTRAINT FK_edition FOREIGN KEY ( edition_id ) REFERENCES edition ( edition_id )
+    CONSTRAINT FK_edition FOREIGN KEY ( edition_id ) REFERENCES edition ( edition_id ) ON DELETE CASCADE
 );
 CREATE TABLE outdoor
 (
@@ -92,7 +92,7 @@ CREATE TABLE outdoor
     rental_period   interval NOT NULL,
     --edition_id      integer NOT NULL,
     CONSTRAINT PK_outdoor PRIMARY KEY ( edition_id ),
-    CONSTRAINT FK_edition FOREIGN KEY ( edition_id ) REFERENCES edition ( edition_id )
+    CONSTRAINT FK_edition FOREIGN KEY ( edition_id ) REFERENCES edition ( edition_id ) ON DELETE CASCADE
 );
 CREATE TABLE reader
 (
@@ -139,9 +139,9 @@ CREATE TABLE worker
     profession_id       integer NOT NULL,
     --reader_id           integer NOT NULL,
     CONSTRAINT PK_worker PRIMARY KEY ( reader_id ),
-    CONSTRAINT FK_reader FOREIGN KEY ( reader_id ) REFERENCES reader ( reader_id ),
-    CONSTRAINT FK_company FOREIGN KEY (company_id) REFERENCES company (company_id),
-    CONSTRAINT FK_profession FOREIGN KEY (profession_id) REFERENCES profession(profession_id)
+    CONSTRAINT FK_reader FOREIGN KEY ( reader_id ) REFERENCES reader ( reader_id ) ON DELETE CASCADE ,
+    CONSTRAINT FK_company FOREIGN KEY (company_id) REFERENCES company (company_id) ON DELETE CASCADE ,
+    CONSTRAINT FK_profession FOREIGN KEY (profession_id) REFERENCES profession(profession_id) ON DELETE CASCADE
 
 );
 CREATE TABLE staff
@@ -151,20 +151,20 @@ CREATE TABLE staff
     lastName        varchar(50) NOT NULL,
     storage_id      integer NOT NULL,
     CONSTRAINT PK_staff PRIMARY KEY ( staff_id ),
-    CONSTRAINT FK_storage FOREIGN KEY ( storage_id ) REFERENCES storage ( storage_id )
+    CONSTRAINT FK_storage FOREIGN KEY ( storage_id ) REFERENCES storage ( storage_id ) ON DELETE CASCADE
 );
 CREATE TABLE distribution
 (
     distribution_id integer NOT NULL,
     reader_id       integer NOT NULL,
-    edition_id      integer NOT NULL,
+    edition_id      integer NOT NULL DEFAULT 0,
     staff_id        integer NOT NULL DEFAULT 0,
     date_give       date NOT NULL,
     date_return     date,
     CONSTRAINT PK_distribution PRIMARY KEY ( distribution_id ),
     CONSTRAINT FK_reader FOREIGN KEY ( reader_id ) REFERENCES reader ( reader_id ),
     CONSTRAINT FK_staff FOREIGN KEY ( staff_id ) REFERENCES staff ( staff_id ) ON DELETE SET DEFAULT ,
-    CONSTRAINT FK_edition FOREIGN KEY ( edition_id ) REFERENCES edition ( edition_id )
+    CONSTRAINT FK_edition FOREIGN KEY ( edition_id ) REFERENCES edition ( edition_id ) ON DELETE SET DEFAULT
 );
 
 
