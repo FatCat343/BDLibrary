@@ -12,5 +12,11 @@ public class IndoorEdition extends Edition {
     @Column(name = "reason_for_indoor_usage_only")
     private String reason;
 
+    public String getReason() {
+        return reason;
+    }
 
+    public void setReason(String reason) {
+        this.reason = reason;
+    }
 }

@@ -53,6 +53,7 @@ INSERT INTO subject (subject_id, name) VALUES (8, 'History');
 INSERT INTO subject (subject_id, name) VALUES (9, 'Linguistics');
 INSERT INTO subject (subject_id, name) VALUES (10, 'Gender Studies');
 
+INSERT INTO library (library_id, address) VALUES (0, 'Unknown');
 INSERT INTO library (library_id, address) VALUES (1, '205 West 39');
 INSERT INTO library (library_id, address) VALUES (2, '1600 Pennsylvania Avenue');
 INSERT INTO library (library_id, address) VALUES (3, '11 Wall Street');
@@ -64,6 +65,7 @@ INSERT INTO library (library_id, address) VALUES (8, '48 Doughty Street');
 INSERT INTO library (library_id, address) VALUES (9, '25 Brook Street');
 INSERT INTO library (library_id, address) VALUES (10, '1 Pirogova Street');
 
+INSERT INTO reader (reader_id, firstname, lastname, library_id) VALUES (0, 'Unknown', 'Unknown', 1);
 INSERT INTO reader (reader_id, firstname, lastname, library_id) VALUES (1, 'John', 'Williams', 1);
 INSERT INTO reader (reader_id, firstname, lastname, library_id) VALUES (2, 'Richard', 'Williams', 1);
 INSERT INTO reader (reader_id, firstname, lastname, library_id) VALUES (3, 'James', 'Stevenson', 1);
@@ -170,6 +172,7 @@ INSERT INTO student (reader_id, department_id, student_code) VALUES (18, 8, 2423
 INSERT INTO student (reader_id, department_id, student_code) VALUES (19, 8, 252345632);
 INSERT INTO student (reader_id, department_id, student_code) VALUES (20, 8, 262345632);
 
+INSERT INTO storage (storage_id, library_id, room_number) VALUES (0, 0, 0);
 INSERT INTO storage (storage_id, library_id, room_number) VALUES (1, 1, 1);
 INSERT INTO storage (storage_id, library_id, room_number) VALUES (2, 2, 1);
 INSERT INTO storage (storage_id, library_id, room_number) VALUES (3, 2, 2);
@@ -183,6 +186,7 @@ INSERT INTO storage (storage_id, library_id, room_number) VALUES (10, 8, 1);
 INSERT INTO storage (storage_id, library_id, room_number) VALUES (11, 9, 1);
 INSERT INTO storage (storage_id, library_id, room_number) VALUES (12, 10, 1);
 
+INSERT INTO staff (staff_id, firstname, lastname, storage_id) VALUES (0, 'DELETED', 'DELETED', 0);
 INSERT INTO staff (staff_id, firstname, lastname, storage_id) VALUES (1, 'Richard', 'Williams', 1);
 INSERT INTO staff (staff_id, firstname, lastname, storage_id) VALUES (2, 'Henry', 'Hall', 1);
 INSERT INTO staff (staff_id, firstname, lastname, storage_id) VALUES (3, 'Olivia', 'Campbell', 2);
@@ -204,6 +208,7 @@ INSERT INTO staff (staff_id, firstname, lastname, storage_id) VALUES (18, 'Emma'
 INSERT INTO staff (staff_id, firstname, lastname, storage_id) VALUES (19, 'Noah', 'Reyes', 9);
 INSERT INTO staff (staff_id, firstname, lastname, storage_id) VALUES (20, 'Sofia', 'Collins', 8);
 
+INSERT INTO bookposition (position_id, storage_id, rack_number, shelf_number) VALUES (0, 0, 0, 0);
 INSERT INTO bookposition (position_id, storage_id, rack_number, shelf_number) VALUES (1, 1, 1, 1);
 INSERT INTO bookposition (position_id, storage_id, rack_number, shelf_number) VALUES (2, 2, 1, 1);
 INSERT INTO bookposition (position_id, storage_id, rack_number, shelf_number) VALUES (3, 2, 1, 2);
@@ -225,6 +230,7 @@ INSERT INTO bookposition (position_id, storage_id, rack_number, shelf_number) VA
 INSERT INTO bookposition (position_id, storage_id, rack_number, shelf_number) VALUES (19, 11, 2, 1);
 INSERT INTO bookposition (position_id, storage_id, rack_number, shelf_number) VALUES (20, 11, 3, 1);
 
+INSERT INTO author (author_id, firstname, lastname) VALUES (0, 'UNKNOWN', 'UNKNOWN');
 INSERT INTO author (author_id, firstname, lastname) VALUES (1, 'John', 'Tolkien');
 INSERT INTO author (author_id, firstname, lastname) VALUES (2, 'George', 'Martin');
 INSERT INTO author (author_id, firstname, lastname) VALUES (3, 'Jules', 'Verne');
@@ -244,6 +250,7 @@ INSERT INTO author (author_id, firstname, lastname) VALUES (16, 'Olivia', 'Hall'
 INSERT INTO author (author_id, firstname, lastname) VALUES (17, 'Steve', 'Lewis');
 INSERT INTO author (author_id, firstname, lastname) VALUES (18, 'Ethan', 'Campbell');
 
+INSERT INTO publication (publication_id, title, author_id) VALUES (0, 'DELETED', 0);
 INSERT INTO publication (publication_id, title, author_id) VALUES (1, 'The Lord of the Rings', 1);
 INSERT INTO publication (publication_id, title, author_id) VALUES (2, 'The Hobbit', 1);
 INSERT INTO publication (publication_id, title, author_id) VALUES (3, 'A Game of Thrones', 2);
@@ -309,6 +316,7 @@ INSERT INTO dissertation (publication_id, subject_id) VALUES (29, 9);
 INSERT INTO dissertation (publication_id, subject_id) VALUES (30, 10);
 INSERT INTO dissertation (publication_id, subject_id) VALUES (31, 10);
 
+INSERT INTO edition (edition_id, edition_code, position_id, publication_id, date_arrived, date_left) VALUES (0, 000000000, 0, 0, '2000-01-01', '2000-01-01');
 INSERT INTO edition (edition_id, edition_code, position_id, publication_id, date_arrived, date_left) VALUES (1, 000000001, 1, 1, '2010-01-20', '2020-01-20');
 INSERT INTO edition (edition_id, edition_code, position_id, publication_id, date_arrived, date_left) VALUES (2, 000000002, 2, 1, '2010-01-20', '2020-01-20');
 INSERT INTO edition (edition_id, edition_code, position_id, publication_id, date_arrived, date_left) VALUES (3, 000000003, 2, 2, '2010-01-20', '2020-01-20');

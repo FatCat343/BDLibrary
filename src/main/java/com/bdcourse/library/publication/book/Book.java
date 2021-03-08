@@ -8,7 +8,7 @@ import java.io.Serializable;
 
 @Entity
 @Table(name = "book")
-public class book extends Publication {
+public class Book extends Publication {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "category_id")
     private Category category;

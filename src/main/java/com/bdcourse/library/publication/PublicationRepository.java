@@ -7,6 +7,11 @@ import org.springframework.data.repository.CrudRepository;
 import java.util.List;
 
 public interface PublicationRepository extends CrudRepository<Publication, Integer> {
+
+    @Override
+    @Query(value = "SELECT *, 0 AS clazz_ FROM library_schema.publication WHERE publication_id != 0", nativeQuery = true)
+    Iterable<Publication> findAll();
+
     //16 query
     @Query(value = "SELECT \n" +
             "    p.title, Max(a.firstname) AS firstname, Max(a.lastname) AS lastname, COUNT(*) AS picked_pieces, 0 AS clazz_ \n" +

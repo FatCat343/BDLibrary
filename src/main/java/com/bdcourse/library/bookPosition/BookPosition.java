@@ -7,7 +7,7 @@ import java.io.Serializable;
 
 @Entity
 @Table(name = "bookposition")
-public class bookPosition implements Serializable {
+public class BookPosition implements Serializable {
     @Id
     @SequenceGenerator(name = "position_generator", sequenceName = "bookPosition_seq", initialValue = 50)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "position_generator")

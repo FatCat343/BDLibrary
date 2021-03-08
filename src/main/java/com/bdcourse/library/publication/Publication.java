@@ -44,4 +44,9 @@ public class Publication implements Serializable {
     public void setAuthor(Author author) {
         this.author = author;
     }
+
+    @Override
+    public String toString() {
+        return title;
+    }
 }

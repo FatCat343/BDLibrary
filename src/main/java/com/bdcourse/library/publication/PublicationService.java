@@ -8,7 +8,16 @@ import java.util.List;
 @Service
 public class PublicationService {
     @Autowired
-    PublicationRepository publicationRepository;
+    private PublicationRepository publicationRepository;
+
+    public List<Publication> findAll() {
+        return (List<Publication>) publicationRepository.findAll();
+    }
+
+
+
+
+
 
     public List<Object[]> findPublicationsByPopularity() {
         return publicationRepository.findPublicationsByPopularity();

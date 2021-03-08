@@ -1,5 +1,6 @@
 package com.bdcourse.library.UI;
 
+import com.bdcourse.library.UI.QueriesUI.FindEditionByAuthorOrPublication;
 import com.bdcourse.library.UI.QueriesUI.FindPublicationByPopularity;
 import com.bdcourse.library.UI.QueriesUI.FindReadersByEdition;
 import com.bdcourse.library.UI.StudentUI.StudentView;
@@ -21,6 +22,7 @@ public class MainView extends AppLayout {
         readers.getSubMenu().addItem(new RouterLink("workers", WorkerView.class));
         queries.getSubMenu().addItem(new RouterLink("Find Reader by Publication Name", FindReadersByEdition.class));
         queries.getSubMenu().addItem(new RouterLink("Get Publications by Popularity", FindPublicationByPopularity.class));
+        queries.getSubMenu().addItem(new RouterLink("Find Edition By Publication Or Author", FindEditionByAuthorOrPublication.class));
         //addToDrawer(menuBar);
         addToNavbar(menuBar);
     }

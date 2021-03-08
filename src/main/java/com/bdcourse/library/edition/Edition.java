@@ -1,6 +1,6 @@
 package com.bdcourse.library.edition;
 
-import com.bdcourse.library.bookPosition.bookPosition;
+import com.bdcourse.library.bookPosition.BookPosition;
 import com.bdcourse.library.publication.Publication;
 
 import javax.persistence.*;
@@ -22,7 +22,7 @@ public class Edition implements Serializable {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "position_id")
-    private bookPosition position;
+    private BookPosition position;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "publication_id")
@@ -50,11 +50,11 @@ public class Edition implements Serializable {
         this.code = code;
     }
 
-    public bookPosition getPosition() {
+    public BookPosition getPosition() {
         return position;
     }
 
-    public void setPosition(bookPosition position) {
+    public void setPosition(BookPosition position) {
         this.position = position;
     }
 

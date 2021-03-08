@@ -10,7 +10,7 @@ CREATE TABLE storage
     library_id  integer NOT NULL,
     room_number integer NOT NULL,
     CONSTRAINT PK_storage PRIMARY KEY ( storage_id ),
-    CONSTRAINT FK_library FOREIGN KEY ( library_id ) REFERENCES library ( library_id )
+    CONSTRAINT FK_library FOREIGN KEY ( library_id ) REFERENCES library ( library_id ) ON DELETE CASCADE
 );
 CREATE TABLE bookPosition
 (
@@ -19,7 +19,7 @@ CREATE TABLE bookPosition
     rack_number  integer NOT NULL,
     shelf_number integer NOT NULL,
     CONSTRAINT PK_bookpos PRIMARY KEY ( position_id ),
-    CONSTRAINT FK_storage FOREIGN KEY ( storage_id ) REFERENCES storage ( storage_id )
+    CONSTRAINT FK_storage FOREIGN KEY ( storage_id ) REFERENCES storage ( storage_id ) ON DELETE CASCADE
 );
 CREATE TABLE author
 (
@@ -34,7 +34,7 @@ CREATE TABLE publication
     title          varchar(50) NOT NULL,
     author_id      integer NOT NULL,
     CONSTRAINT PK_publication PRIMARY KEY ( publication_id ),
-    CONSTRAINT FK_author FOREIGN KEY ( author_id ) REFERENCES author ( author_id )
+    CONSTRAINT FK_author FOREIGN KEY ( author_id ) REFERENCES author ( author_id ) ON DELETE CASCADE
 );
 CREATE TABLE category
 (
@@ -49,7 +49,7 @@ CREATE TABLE book
     category_id          integer NOT NULL,
     CONSTRAINT PK_book PRIMARY KEY ( publication_id ),
     CONSTRAINT FK_publication FOREIGN KEY ( publication_id ) REFERENCES publication ( publication_id ),
-    CONSTRAINT FK_category FOREIGN KEY ( category_id ) REFERENCES category ( category_id )
+    CONSTRAINT FK_category FOREIGN KEY ( category_id ) REFERENCES category ( category_id ) ON DELETE CASCADE
 );
 CREATE TABLE subject
 (
@@ -101,7 +101,7 @@ CREATE TABLE reader
     lastName            varchar(50) NOT NULL,
     library_id          integer NOT NULL,
     CONSTRAINT PK_reader PRIMARY KEY ( reader_id ),
-    CONSTRAINT FK_library FOREIGN KEY ( library_id ) REFERENCES library ( library_id )
+    CONSTRAINT FK_library FOREIGN KEY ( library_id ) REFERENCES library ( library_id ) ON DELETE CASCADE
 );
 CREATE TABLE department
 (
@@ -117,8 +117,8 @@ CREATE TABLE student
     student_code    integer NOT NULL,
     --reader_id       integer NOT NULL,
     CONSTRAINT PK_student PRIMARY KEY ( reader_id ),
-    CONSTRAINT FK_reader FOREIGN KEY ( reader_id ) REFERENCES reader ( reader_id ),
-    CONSTRAINT FK_department FOREIGN KEY (department_id) REFERENCES department(department_id)
+    CONSTRAINT FK_reader FOREIGN KEY ( reader_id ) REFERENCES reader ( reader_id ) ON DELETE CASCADE ,
+    CONSTRAINT FK_department FOREIGN KEY (department_id) REFERENCES department(department_id) ON DELETE CASCADE
 );
 CREATE TABLE company
 (
@@ -158,12 +158,12 @@ CREATE TABLE distribution
     distribution_id integer NOT NULL,
     reader_id       integer NOT NULL,
     edition_id      integer NOT NULL,
-    staff_id        integer NOT NULL,
+    staff_id        integer NOT NULL DEFAULT 0,
     date_give       date NOT NULL,
     date_return     date,
     CONSTRAINT PK_distribution PRIMARY KEY ( distribution_id ),
     CONSTRAINT FK_reader FOREIGN KEY ( reader_id ) REFERENCES reader ( reader_id ),
-    CONSTRAINT FK_staff FOREIGN KEY ( staff_id ) REFERENCES staff ( staff_id ),
+    CONSTRAINT FK_staff FOREIGN KEY ( staff_id ) REFERENCES staff ( staff_id ) ON DELETE SET DEFAULT ,
     CONSTRAINT FK_edition FOREIGN KEY ( edition_id ) REFERENCES edition ( edition_id )
 );
 
