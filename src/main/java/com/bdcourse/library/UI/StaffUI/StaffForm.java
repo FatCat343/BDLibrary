@@ -3,6 +3,7 @@ package com.bdcourse.library.UI.StaffUI;
 import com.bdcourse.library.UI.StudentUI.StudentForm;
 import com.bdcourse.library.library.Library;
 import com.bdcourse.library.staff.Staff;
+import com.bdcourse.library.staff.StaffService;
 import com.bdcourse.library.storage.Storage;
 import com.bdcourse.library.storage.StorageService;
 import com.vaadin.flow.component.ComponentEvent;
@@ -27,12 +28,14 @@ public class StaffForm extends VerticalLayout {
     Button close = new Button("close");
 
     private StorageService storageService;
+    private StaffService staffService;
 
     Binder<Staff> staffBinder = new Binder<>(Staff.class);
     private Staff staff;
 
-    public StaffForm(StorageService storageService) {
+    public StaffForm(StorageService storageService, StaffService staffService) {
         //this.storage
+        this.staffService = staffService;
         staffBinder.bindInstanceFields(this);
         staffBinder.forField(firstName)
                 .withValidator(min -> min.length() >= 1, "Minimum 1 letter")
@@ -74,8 +77,9 @@ public class StaffForm extends VerticalLayout {
     }
 
     public void setStaff(Staff staff) {
-        this.staff = staff;
-        staffBinder.readBean(staff);
+        Staff fetchedStaff = staffService.findStaffByIdFetch(staff);
+        this.staff = fetchedStaff;
+        staffBinder.readBean(fetchedStaff);
     }
 
     public static abstract class StaffFormEvent extends ComponentEvent<StaffForm> {

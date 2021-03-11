@@ -26,7 +26,7 @@ public class StaffView extends VerticalLayout {
         setSizeFull();
         HorizontalLayout toolbar = configureToolBar();
         configureGrid();
-        form = new StaffForm(storageService);
+        form = new StaffForm(storageService, staffService);
         form.addListener(StaffForm.saveEvent.class, this::saveStaff);
         form.addListener(StaffForm.deleteEvent.class, this::deleteStaff);
         form.addListener(StaffForm.closeEvent.class, e -> closeEditor());
@@ -49,7 +49,9 @@ public class StaffView extends VerticalLayout {
                 "<div class='custom-details' style='border: 1px solid gray; padding: 10px; width: 100%; box-sizing: border-box;'>"
                         + "<div>Assigned to storage : <b>[[item.storage]]!</b></div>"
                         + "</div>")
-                .withProperty("storage", Staff::getStorageName)
+                .withProperty("storage", staff -> {
+                    return staffService.findStaffByIdFetch(staff).getStorage().toString();
+                })
                 // This is now how we open the details
                 .withEventHandler("handleClick", staff -> {
                     grid.getDataProvider().refreshItem(staff);
@@ -73,7 +75,7 @@ public class StaffView extends VerticalLayout {
     }
 
     private void updateList(){
-        grid.setItems(staffService.findAllFetch());
+        grid.setItems(staffService.findAll());
     }
 
     private void saveStaff(StaffForm.saveEvent event) {

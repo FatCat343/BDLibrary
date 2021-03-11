@@ -10,6 +10,15 @@ public class StaffService {
     @Autowired
     private StaffRepository staffRepository;
 
+    public List<Staff> findAll(){
+        return (List<Staff>) staffRepository.findAll();
+    }
+
+    public Staff findStaffByIdFetch(Staff staff) {
+        if (staff == null) return null;
+        else return staffRepository.findStaffByIdFetch(staff.getId());
+    }
+
     public List<Staff> findAllFetch() {
         return staffRepository.findAllFetch();
     }
