@@ -9,11 +9,11 @@ public class WorkerSort {
         this.descending = descending;
     }
 
-    public String getProperty() {
+    public String getPropertyName() {
         return property;
     }
 
-    public void setProperty(String property) {
+    public void setPropertyName(String property) {
         this.property = property;
     }
 

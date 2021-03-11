@@ -14,7 +14,7 @@ public class Storage implements Serializable {
     @Column(name = "storage_id")
     private Integer id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "library_id")
     private Library library;
 
@@ -43,5 +43,10 @@ public class Storage implements Serializable {
 
     public void setRoomNumber(Integer roomNumber) {
         this.roomNumber = roomNumber;
+    }
+
+    @Override
+    public String toString() {
+        return roomNumber +" room in " + library.getAddress();
     }
 }

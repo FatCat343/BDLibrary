@@ -193,9 +193,9 @@ public class WorkerView extends VerticalLayout {
                     List<Worker> workers = getWorkerService().fetch(page, limit,
                             filter.map(f -> f.getFirstName()).orElse(null),
                             filter.map(f -> f.getLastName()).orElse(null),
-                            filter.map(f -> f.getCode()).orElse(null),
+                            filter.map(f -> f.getProfession()).orElse(null),
+                            filter.map(f -> f.getCompany()).orElse(null),
                             filter.map(f -> f.getLibrary()).orElse(null),
-                            filter.map(f -> f.getDepartment()).orElse(null) ,
                             sortOrders);
                     return workers.stream();
                 },
@@ -205,9 +205,9 @@ public class WorkerView extends VerticalLayout {
                     return (int) getWorkerService().getWorkerCount(
                             filter.map(f -> f.getFirstName()).orElse(null),
                             filter.map(f -> f.getLastName()).orElse(null),
-                            filter.map(f -> f.getCode()).orElse(null),
-                            filter.map(f -> f.getLibrary()).orElse(null),
-                            filter.map(f -> f.getDepartment()).orElse(null));
+                            filter.map(f -> f.getProfession()).orElse(null),
+                            filter.map(f -> f.getCompany()).orElse(null),
+                            filter.map(f -> f.getLibrary()).orElse(null));
                 });
         return dataProvider;
     }

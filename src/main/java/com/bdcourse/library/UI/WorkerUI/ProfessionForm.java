@@ -16,7 +16,7 @@ import com.vaadin.flow.data.binder.ValidationException;
 import com.vaadin.flow.shared.Registration;
 
 public class ProfessionForm extends VerticalLayout {
-    TextField professionName = new TextField("Company");
+    TextField name = new TextField("Profession");
 
     Button save = new Button("save");
     Button delete = new Button("delete");
@@ -29,7 +29,7 @@ public class ProfessionForm extends VerticalLayout {
         addClassName("profession-form");
         //studentBinder.forField(code).withConverter(new DoubleToIntegerConverter()).bind(Student::getCode, Student::setCode);
         professionBinder.bindInstanceFields(this);
-        professionBinder.forField(professionName)
+        professionBinder.forField(name)
                 .withValidator(min -> min.length() >= 1, "Minimum 1 letter")
                 .withValidator(max -> max.length() <= 20, "Maximum 20 letters")
                 .bind(Profession::getName, Profession::setName);
@@ -46,7 +46,7 @@ public class ProfessionForm extends VerticalLayout {
     }
 
     private HorizontalLayout createFieldsLayout() {
-        return new HorizontalLayout(professionName);
+        return new HorizontalLayout(name);
     }
 
     private HorizontalLayout createButtonsLayout() {

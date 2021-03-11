@@ -52,6 +52,10 @@ public class Staff implements Serializable {
         return storage;
     }
 
+    public String getStorageName() {
+        return storage.toString();
+    }
+
     public void setStorage(Storage storage) {
         this.storage = storage;
     }

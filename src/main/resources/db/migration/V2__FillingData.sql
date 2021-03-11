@@ -1,4 +1,4 @@
-INSERT INTO company (company_id, name) VALUES (1, 'google');
+INSERT INTO company (company_id, name) VALUES (1, 'Google');
 INSERT INTO company (company_id, name) VALUES (2, 'Yandex');
 INSERT INTO company (company_id, name) VALUES (3, '2GIS');
 INSERT INTO company (company_id, name) VALUES (4, 'Bethesda');

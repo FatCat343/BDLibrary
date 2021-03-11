@@ -3,6 +3,7 @@ package com.bdcourse.library.UI;
 import com.bdcourse.library.UI.QueriesUI.FindEditionByAuthorOrPublication;
 import com.bdcourse.library.UI.QueriesUI.FindPublicationByPopularity;
 import com.bdcourse.library.UI.QueriesUI.FindReadersByEdition;
+import com.bdcourse.library.UI.StaffUI.StaffView;
 import com.bdcourse.library.UI.StudentUI.StudentView;
 import com.bdcourse.library.UI.WorkerUI.WorkerView;
 import com.vaadin.flow.component.applayout.AppLayout;
@@ -16,13 +17,16 @@ public class MainView extends AppLayout {
 
     public MainView() {
         MenuItem readers = menuBar.addItem("readers");
+        MenuItem publications = menuBar.addItem("publications");
         MenuItem editions = menuBar.addItem("editions");
         MenuItem queries = menuBar.addItem("queries");
+        MenuItem staff = menuBar.addItem("staff");
         readers.getSubMenu().addItem(new RouterLink("students", StudentView.class));
         readers.getSubMenu().addItem(new RouterLink("workers", WorkerView.class));
         queries.getSubMenu().addItem(new RouterLink("Find Reader by Publication Name", FindReadersByEdition.class));
         queries.getSubMenu().addItem(new RouterLink("Get Publications by Popularity", FindPublicationByPopularity.class));
         queries.getSubMenu().addItem(new RouterLink("Find Edition By Publication Or Author", FindEditionByAuthorOrPublication.class));
+        staff.getSubMenu().addItem(new RouterLink("staff", StaffView.class));
         //addToDrawer(menuBar);
         addToNavbar(menuBar);
     }
