@@ -82,6 +82,12 @@ public class StaffForm extends VerticalLayout {
         staffBinder.readBean(fetchedStaff);
     }
 
+    public void setStaffNotFetched(Staff staff) {
+        //Staff fetchedStaff = staffService.findStaffByIdFetch(staff);
+        this.staff = staff;
+        staffBinder.readBean(staff);
+    }
+
     public static abstract class StaffFormEvent extends ComponentEvent<StaffForm> {
         private Staff staff;
 

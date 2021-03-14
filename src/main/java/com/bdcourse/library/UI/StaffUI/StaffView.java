@@ -71,7 +71,9 @@ public class StaffView extends VerticalLayout {
 
     private void addStaff() {
         grid.asSingleSelect().clear();
-        editStaff(new Staff());
+        //editStaff(new Staff());
+        form.setStaffNotFetched(new Staff());
+        form.setVisible(true);
     }
 
     private void updateList(){
