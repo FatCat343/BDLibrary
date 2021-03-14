@@ -104,9 +104,9 @@ public class StaffView extends VerticalLayout {
         }
     }
 
-    private void configureFilter(TextField field, String name) {
-        field.setPlaceholder(name);
-        field.setClearButtonVisible(true);
-        field.setValueChangeMode(ValueChangeMode.LAZY);
-    }
+//    private void configureFilter(TextField field, String name) {
+//        field.setPlaceholder(name);
+//        field.setClearButtonVisible(true);
+//        field.setValueChangeMode(ValueChangeMode.LAZY);
+//    }
 }

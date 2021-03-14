@@ -14,4 +14,11 @@ public class AuthorService {
         return (List<Author>) authorRepository.findAll();
     }
 
+    public Author save(Author author) {
+        return authorRepository.save(author);
+    }
+
+    public void delete(Author author) {
+        authorRepository.delete(author);
+    }
 }
