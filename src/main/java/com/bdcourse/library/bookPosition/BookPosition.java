@@ -12,47 +12,47 @@ public class BookPosition implements Serializable {
     @SequenceGenerator(name = "position_generator", sequenceName = "bookPosition_seq", initialValue = 50)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "position_generator")
     @Column(name = "position_id")
-    private Integer position_id;
+    private Integer id;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "storage_id")
-    private Storage storage_id;
+    private Storage storage;
 
     @Column(name = "rack_number")
-    private Integer rack_number;
+    private Integer rackNumber;
 
     @Column(name = "shelf_number")
-    private Integer shelf_number;
+    private Integer shelfNumber;
 
-    public Integer getPosition_id() {
-        return position_id;
+    public Integer getId() {
+        return id;
     }
 
-    public void setPosition_id(Integer position_id) {
-        this.position_id = position_id;
+    public void setId(Integer id) {
+        this.id = id;
     }
 
-    public Storage getStorage_id() {
-        return storage_id;
+    public Storage getStorage() {
+        return storage;
     }
 
-    public void setStorage_id(Storage storage_id) {
-        this.storage_id = storage_id;
+    public void setStorage(Storage storage) {
+        this.storage = storage;
     }
 
-    public Integer getRack_number() {
-        return rack_number;
+    public Integer getRackNumber() {
+        return rackNumber;
     }
 
-    public void setRack_number(Integer rack_number) {
-        this.rack_number = rack_number;
+    public void setRackNumber(Integer rackNumber) {
+        this.rackNumber = rackNumber;
     }
 
-    public Integer getShelf_number() {
-        return shelf_number;
+    public Integer getShelfNumber() {
+        return shelfNumber;
     }
 
-    public void setShelf_number(Integer shelf_number) {
-        this.shelf_number = shelf_number;
+    public void setShelfNumber(Integer shelfNumber) {
+        this.shelfNumber = shelfNumber;
     }
 }

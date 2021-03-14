@@ -1,6 +1,7 @@
 package com.bdcourse.library.UI;
 
 import com.bdcourse.library.UI.AuthorUI.AuthorView;
+import com.bdcourse.library.UI.BookPositionUI.BookPositionView;
 import com.bdcourse.library.UI.QueriesUI.FindEditionByAuthorOrPublication;
 import com.bdcourse.library.UI.QueriesUI.FindPublicationByPopularity;
 import com.bdcourse.library.UI.QueriesUI.FindReadersByEdition;
@@ -23,6 +24,8 @@ public class MainView extends AppLayout {
         MenuItem queries = menuBar.addItem("queries");
         MenuItem staff = menuBar.addItem("staff");
         MenuItem author = menuBar.addItem("authors");
+        MenuItem bookPosition = menuBar.addItem("bookPositions");
+
         author.getSubMenu().addItem(new RouterLink("authors", AuthorView.class));
         readers.getSubMenu().addItem(new RouterLink("students", StudentView.class));
         readers.getSubMenu().addItem(new RouterLink("workers", WorkerView.class));
@@ -30,6 +33,7 @@ public class MainView extends AppLayout {
         queries.getSubMenu().addItem(new RouterLink("Get Publications by Popularity", FindPublicationByPopularity.class));
         queries.getSubMenu().addItem(new RouterLink("Find Edition By Publication Or Author", FindEditionByAuthorOrPublication.class));
         staff.getSubMenu().addItem(new RouterLink("staff", StaffView.class));
+        bookPosition.getSubMenu().addItem(new RouterLink("BookPositions", BookPositionView.class));
         //addToDrawer(menuBar);
         addToNavbar(menuBar);
     }
