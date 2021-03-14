@@ -55,27 +55,27 @@ public class DistributionView extends VerticalLayout {
 
         grid.setItemDetailsRenderer(TemplateRenderer.<Distribution>of(
                 "<div class='custom-details' style='border: 1px solid gray; padding: 10px; width: 100%; box-sizing: border-box;'>"
-                        + "<div>Edition : <b>[[item.edition]]!</b></div>"
+                        + "<div>Edition : <b>[[item.edition]]</b></div>"
                        // + "<div>Edition : <b>[[item.publication]]!</b></div>"
-                        + "<div>Reader : <b>[[item.reader]]!</b></div>"
-                        + "<div>Staff : <b>[[item.staff]]!</b></div>"
-                        + "<div>Storage : <b>[[item.storage]]!</b></div>"
+                        + "<div>Reader : <b>[[item.reader]]</b></div>"
+                        + "<div>Staff : <b>[[item.staff]]</b></div>"
+                        + "<div>Storage : <b>[[item.storage]]</b></div>"
                         + "</div>")
                 .withProperty("edition", distribution -> {
                     Edition edition = distributionService.findDistributionFetchEdition(distribution).getEdition();
-                    return "Edition : " + edition.getCode();
+                    return edition.getCode();
                 })
                 .withProperty("reader", distribution -> {
                     Reader reader = distributionService.findDistributionFetchReader(distribution).getReader();
-                    return "Reader : " + reader.toString();
+                    return reader.toString();
                 })
                 .withProperty("staff", distribution -> {
                     Staff staff = distributionService.findDistributionFetchStaff(distribution).getStaff();
-                    return "Staff : " + staff.toString();
+                    return staff.toString();
                 })
                 .withProperty("storage", distribution -> {
                     Reader reader = distributionService.findDistributionFetchReader(distribution).getReader();
-                    return "Staff : " + reader.getLibrary().toString();
+                    return reader.getLibrary().toString();
                 })
                 // This is now how we open the details
                 .withEventHandler("handleClick", distribution -> {
