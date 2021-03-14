@@ -1,11 +1,15 @@
 package com.bdcourse.library.edition.outdoorEdition;
 
 import com.bdcourse.library.edition.Edition;
+import org.hibernate.annotations.TypeDef;
 import org.springframework.data.annotation.TypeAlias;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import java.time.Duration;
+
 
 @Entity
 @Table(name = "outdoor")

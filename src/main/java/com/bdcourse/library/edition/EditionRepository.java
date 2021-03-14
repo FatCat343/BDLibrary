@@ -8,7 +8,13 @@ import java.util.List;
 
 public interface EditionRepository extends CrudRepository<Edition, Integer> {
 
-//    //5 query
+    @Override
+    @Query(value = "SELECT *, 0 AS clazz_ FROM library_schema.edition e WHERE e.edition_id != 0", nativeQuery = true)
+    Iterable<Edition> findAll();
+
+//    @Query(value = "SELECT d FROM Distribution d JOIN FETCH d.edition e WHERE d.id = :id")
+//    Edition findEditionByIdFetchPublication(@Param("id") Integer id);
+    //    //5 query
 //    List<Edition> findEditionByReaderInAssignedLibrary();
 //
 //    //6 query

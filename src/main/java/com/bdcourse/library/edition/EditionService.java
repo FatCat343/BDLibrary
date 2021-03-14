@@ -13,6 +13,19 @@ public class EditionService {
     @Autowired
     private EditionRepository editionRepository;
 
+    public List<Edition> findAll() {
+        return (List<Edition>) editionRepository.findAll();
+    }
+
+    public void delete(Edition edition) {
+        editionRepository.delete(edition);
+    }
+
+    public Edition save(Edition edition) {
+        return editionRepository.save(edition);
+    }
+
+
     public List<Edition> findEditionByAuthor(Author author) {
         return author == null ? new ArrayList<Edition>() : editionRepository.findEditionByAuthor(author.getId());
     }

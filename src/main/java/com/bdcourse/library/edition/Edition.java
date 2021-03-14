@@ -81,4 +81,9 @@ public class Edition implements Serializable {
     public void setDateLeft(Date dateLeft) {
         this.dateLeft = dateLeft;
     }
+
+    @Override
+    public String toString() {
+        return code.toString();
+    }
 }

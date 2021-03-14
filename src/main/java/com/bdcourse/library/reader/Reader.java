@@ -56,4 +56,9 @@ public class Reader implements Serializable {
     public void setLibrary(Library library) {
         this.library = library;
     }
+
+    @Override
+    public String toString() {
+        return firstName + " " + lastName;
+    }
 }

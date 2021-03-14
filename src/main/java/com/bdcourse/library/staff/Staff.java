@@ -59,4 +59,9 @@ public class Staff implements Serializable {
     public void setStorage(Storage storage) {
         this.storage = storage;
     }
+
+    @Override
+    public String toString() {
+        return firstName + " " + lastName;
+    }
 }

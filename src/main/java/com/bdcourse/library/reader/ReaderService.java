@@ -14,12 +14,24 @@ public class ReaderService {
     @Autowired
     private ReaderRepository readerRepository;
 
+    public List<Reader> findAll() {
+        return (List<Reader>) readerRepository.findAll();
+    }
+
+    public Reader save(Reader reader) {
+        return readerRepository.save(reader);
+    }
+
+    public void delete(Reader reader) {
+        readerRepository.delete(reader);
+    }
+
 //    public List<Student> findAll() {
 //        return
 //    }
     public List<Reader> findReaderByPublication(String name) {
-        System.out.println(name);
-        System.out.println(readerRepository.findReaderByPublication(name));
+        //System.out.println(name);
+        //System.out.println(readerRepository.findReaderByPublication(name));
 
         return readerRepository.findReaderByPublication(name);
     }

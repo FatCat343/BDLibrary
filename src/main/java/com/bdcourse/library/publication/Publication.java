@@ -47,6 +47,6 @@ public class Publication implements Serializable {
 
     @Override
     public String toString() {
-        return title;
+        return author + ", " + title;
     }
 }

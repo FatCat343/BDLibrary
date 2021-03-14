@@ -81,7 +81,7 @@ CREATE TABLE edition
 CREATE TABLE indoor
 (
     edition_id                     integer NOT NULL,
-    reason_for_indoor_usage_only  text NOT NULL,
+    reason_for_indoor_usage_only   text NOT NULL,
     --edition_id                    integer NOT NULL,
     CONSTRAINT PK_indoor PRIMARY KEY ( edition_id ),
     CONSTRAINT FK_edition FOREIGN KEY ( edition_id ) REFERENCES edition ( edition_id ) ON DELETE CASCADE
@@ -89,7 +89,7 @@ CREATE TABLE indoor
 CREATE TABLE outdoor
 (
     edition_id      integer NOT NULL,
-    rental_period   interval NOT NULL,
+    rental_period   integer NOT NULL, --days
     --edition_id      integer NOT NULL,
     CONSTRAINT PK_outdoor PRIMARY KEY ( edition_id ),
     CONSTRAINT FK_edition FOREIGN KEY ( edition_id ) REFERENCES edition ( edition_id ) ON DELETE CASCADE
