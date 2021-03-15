@@ -5,6 +5,7 @@ import com.bdcourse.library.UI.BookPositionUI.BookPositionView;
 import com.bdcourse.library.UI.BookUI.BookView;
 import com.bdcourse.library.UI.DissertationUI.DissertationView;
 import com.bdcourse.library.UI.DistributionUI.DistributionView;
+import com.bdcourse.library.UI.EditionUI.EditionView;
 import com.bdcourse.library.UI.LibraryUI.LibraryView;
 import com.bdcourse.library.UI.QueriesUI.FindEditionByAuthorOrPublication;
 import com.bdcourse.library.UI.QueriesUI.FindPublicationByPopularity;
@@ -46,6 +47,7 @@ public class MainView extends AppLayout {
         publications.getSubMenu().addItem(new RouterLink("Dissertations", DissertationView.class));
         storages.getSubMenu().addItem(new RouterLink("Storages", StorageView.class));
         libraries.getSubMenu().addItem(new RouterLink("Libraries", LibraryView.class));
+        editions.getSubMenu().addItem(new RouterLink("Editions", EditionView.class));
         //addToDrawer(menuBar);
         addToNavbar(menuBar);
     }

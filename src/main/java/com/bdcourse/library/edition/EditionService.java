@@ -25,6 +25,9 @@ public class EditionService {
         return editionRepository.save(edition);
     }
 
+    public List<Edition> findAllFetchAll() {
+        return editionRepository.findAllFetchAll();
+    }
 
     public List<Edition> findEditionByAuthor(Author author) {
         return author == null ? new ArrayList<Edition>() : editionRepository.findEditionByAuthor(author.getId());

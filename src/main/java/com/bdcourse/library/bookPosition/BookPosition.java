@@ -55,4 +55,9 @@ public class BookPosition implements Serializable {
     public void setShelfNumber(Integer shelfNumber) {
         this.shelfNumber = shelfNumber;
     }
+
+    @Override
+    public String toString() {
+        return "shelf: " + shelfNumber + ", rack: " + rackNumber + ", " + storage.toString();
+    }
 }

@@ -5,7 +5,8 @@ import com.bdcourse.library.publication.Publication;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.Date;
+import java.time.LocalDate;
+
 
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
@@ -29,10 +30,10 @@ public class Edition implements Serializable {
     private Publication publication;
 
     @Column(name = "date_arrived")
-    private Date dateArrived;
+    private LocalDate dateArrived;
 
     @Column(name = "date_left")
-    private Date dateLeft;
+    private LocalDate dateLeft;
 
     public Integer getEdition_id() {
         return edition_id;
@@ -66,19 +67,19 @@ public class Edition implements Serializable {
         this.publication = publication;
     }
 
-    public Date getDateArrived() {
+    public LocalDate getDateArrived() {
         return dateArrived;
     }
 
-    public void setDateArrived(Date dateArrived) {
+    public void setDateArrived(LocalDate dateArrived) {
         this.dateArrived = dateArrived;
     }
 
-    public Date getDateLeft() {
+    public LocalDate getDateLeft() {
         return dateLeft;
     }
 
-    public void setDateLeft(Date dateLeft) {
+    public void setDateLeft(LocalDate dateLeft) {
         this.dateLeft = dateLeft;
     }
 

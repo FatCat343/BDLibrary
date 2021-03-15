@@ -9,8 +9,14 @@ import java.util.List;
 public interface EditionRepository extends CrudRepository<Edition, Integer> {
 
     @Override
-    @Query(value = "SELECT *, 0 AS clazz_ FROM library_schema.edition e WHERE e.edition_id != 0", nativeQuery = true)
+    @Query(value = "SELECT *, 0 AS clazz_ FROM library_schema.edition e WHERE e.edition_id != 0 " +
+            "ORDER BY e.edition_id ASC", nativeQuery = true)
     Iterable<Edition> findAll();
+
+    @Query(value = "SELECT e FROM Edition e JOIN FETCH e.publication publ JOIN FETCH e.position pos " +
+            "JOIN FETCH pos.storage stor WHERE e.edition_id > 0 ORDER BY e.edition_id ASC")
+    List<Edition> findAllFetchAll();
+
 
 //    @Query(value = "SELECT d FROM Distribution d JOIN FETCH d.edition e WHERE d.id = :id")
 //    Edition findEditionByIdFetchPublication(@Param("id") Integer id);

@@ -9,7 +9,8 @@ import java.util.List;
 public interface PublicationRepository extends CrudRepository<Publication, Integer> {
 
     @Override
-    @Query(value = "SELECT *, 0 AS clazz_ FROM library_schema.publication WHERE publication_id != 0", nativeQuery = true)
+    @Query(value = "SELECT *, 0 AS clazz_ FROM library_schema.publication WHERE publication_id != 0 " +
+            "ORDER BY publication_id ASC", nativeQuery = true)
     Iterable<Publication> findAll();
 
     //16 query
