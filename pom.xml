@@ -33,6 +33,11 @@
             <artifactId>vaadin-spring-boot-starter</artifactId>
         </dependency>
         <dependency>
+            <groupId>org.vaadin.gatanaso</groupId>
+            <artifactId>multiselect-combo-box-flow</artifactId>
+            <version>LATEST</version>
+        </dependency>
+        <dependency>
             <groupId>org.flywaydb</groupId>
             <artifactId>flyway-core</artifactId>
         </dependency>

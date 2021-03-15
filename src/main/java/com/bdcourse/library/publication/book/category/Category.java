@@ -10,15 +10,15 @@ public class Category implements Serializable {
     @SequenceGenerator(name = "category_generator", sequenceName = "category_seq", initialValue = 50)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "category_generator")
     @Column(name = "category_id")
-    private String id;
+    private Integer id;
 
     private String name;
 
-    public String getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -28,5 +28,10 @@ public class Category implements Serializable {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    @Override
+    public String toString() {
+        return name;
     }
 }
