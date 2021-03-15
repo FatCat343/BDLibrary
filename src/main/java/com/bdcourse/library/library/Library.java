@@ -7,12 +7,12 @@ import java.io.Serializable;
 @Table(name = "library")
 public class Library implements Serializable {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_gen_library")
-    @SequenceGenerator(name = "seq_gen_library", sequenceName = "seq_library")
+    @SequenceGenerator(name = "library_generator", sequenceName = "library_seq", initialValue = 50)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "library_generator")
     @Column(name = "library_id")
     private Integer id;
 
-    @Column(name = "address", nullable = false, updatable = false)
+    @Column(name = "address")
     private String address;
 
     public Integer getId() {

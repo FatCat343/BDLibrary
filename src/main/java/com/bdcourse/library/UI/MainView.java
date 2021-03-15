@@ -5,10 +5,12 @@ import com.bdcourse.library.UI.BookPositionUI.BookPositionView;
 import com.bdcourse.library.UI.BookUI.BookView;
 import com.bdcourse.library.UI.DissertationUI.DissertationView;
 import com.bdcourse.library.UI.DistributionUI.DistributionView;
+import com.bdcourse.library.UI.LibraryUI.LibraryView;
 import com.bdcourse.library.UI.QueriesUI.FindEditionByAuthorOrPublication;
 import com.bdcourse.library.UI.QueriesUI.FindPublicationByPopularity;
 import com.bdcourse.library.UI.QueriesUI.FindReadersByEdition;
 import com.bdcourse.library.UI.StaffUI.StaffView;
+import com.bdcourse.library.UI.StorageUI.StorageView;
 import com.bdcourse.library.UI.StudentUI.StudentView;
 import com.bdcourse.library.UI.WorkerUI.WorkerView;
 import com.vaadin.flow.component.applayout.AppLayout;
@@ -21,13 +23,15 @@ public class MainView extends AppLayout {
     private MenuBar menuBar = new MenuBar();
 
     public MainView() {
-        MenuItem readers = menuBar.addItem("readers");
-        MenuItem publications = menuBar.addItem("publications");
-        MenuItem editions = menuBar.addItem("editions");
-        MenuItem queries = menuBar.addItem("queries");
-        MenuItem staff = menuBar.addItem("staff");
-        MenuItem author = menuBar.addItem("authors");
+        MenuItem readers = menuBar.addItem("Readers");
+        MenuItem publications = menuBar.addItem("Publications");
+        MenuItem editions = menuBar.addItem("Editions");
+        MenuItem queries = menuBar.addItem("Queries");
+        MenuItem staff = menuBar.addItem("Staff");
+        MenuItem author = menuBar.addItem("Authors");
         MenuItem bookPosition = menuBar.addItem("BookPositions");
+        MenuItem storages = menuBar.addItem("Storages");
+        MenuItem libraries = menuBar.addItem("Libraries");
         MenuItem distribution = menuBar.addItem("Distribution");
         author.getSubMenu().addItem(new RouterLink("Authors", AuthorView.class));
         readers.getSubMenu().addItem(new RouterLink("Students", StudentView.class));
@@ -40,6 +44,8 @@ public class MainView extends AppLayout {
         distribution.getSubMenu().addItem(new RouterLink("Distribution", DistributionView.class));
         publications.getSubMenu().addItem(new RouterLink("Books", BookView.class));
         publications.getSubMenu().addItem(new RouterLink("Dissertations", DissertationView.class));
+        storages.getSubMenu().addItem(new RouterLink("Storages", StorageView.class));
+        libraries.getSubMenu().addItem(new RouterLink("Libraries", LibraryView.class));
         //addToDrawer(menuBar);
         addToNavbar(menuBar);
     }

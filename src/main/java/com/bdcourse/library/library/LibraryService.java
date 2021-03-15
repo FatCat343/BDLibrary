@@ -13,4 +13,15 @@ public class LibraryService {
     public List<Library> findAll() {
         return (List<Library>) libraryRepository.findAll();
     }
+
+    public void delete(Library library) {
+        libraryRepository.delete(library);
+    }
+
+    public Library save(Library library) {
+        System.out.println("save library = " + library);
+        Library result =  libraryRepository.save(library);
+        System.out.println("result = " + result);
+        return result;
+    }
 }
