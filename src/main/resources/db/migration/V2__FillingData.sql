@@ -65,7 +65,7 @@ INSERT INTO library (library_id, address) VALUES (8, '48 Doughty Street');
 INSERT INTO library (library_id, address) VALUES (9, '25 Brook Street');
 INSERT INTO library (library_id, address) VALUES (10, '1 Pirogova Street');
 
-INSERT INTO reader (reader_id, firstname, lastname, library_id) VALUES (0, 'Unknown', 'Unknown', 1);
+INSERT INTO reader (reader_id, firstname, lastname, library_id) VALUES (0, 'Unknown', 'Unknown', 0);
 INSERT INTO reader (reader_id, firstname, lastname, library_id) VALUES (1, 'John', 'Williams', 1);
 INSERT INTO reader (reader_id, firstname, lastname, library_id) VALUES (2, 'Richard', 'Williams', 1);
 INSERT INTO reader (reader_id, firstname, lastname, library_id) VALUES (3, 'James', 'Stevenson', 1);
