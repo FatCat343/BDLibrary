@@ -19,9 +19,7 @@ public class LibraryService {
     }
 
     public Library save(Library library) {
-        System.out.println("save library = " + library);
         Library result =  libraryRepository.save(library);
-        System.out.println("result = " + result);
         return result;
     }
 }

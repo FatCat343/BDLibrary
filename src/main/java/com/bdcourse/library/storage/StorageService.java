@@ -13,4 +13,12 @@ public class StorageService {
     public List<Storage> findAll(){
         return storageRepository.findAll();
     }
+
+    public Storage save(Storage storage) {
+        return storageRepository.save(storage);
+    }
+
+    public void delete(Storage storage) {
+        storageRepository.delete(storage);
+    }
 }
