@@ -101,8 +101,8 @@ public class BookService {
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaQuery<Book> query = criteriaBuilder.createQuery(Book.class);
         Root<Book> root = query.from(Book.class);
-        Join<Book, Author> bookAuthorJoin = root.join("author");
-        Join<Book, Category> bookCategoryJoin = root.join("category");
+//        Join<Book, Author> bookAuthorJoin = root.join("author");
+//        Join<Book, Category> bookCategoryJoin = root.join("category");
 
         query.select(root);
 

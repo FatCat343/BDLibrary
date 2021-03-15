@@ -10,15 +10,15 @@ public class Subject implements Serializable {
     @SequenceGenerator(name = "subject_generator", sequenceName = "subject_seq", initialValue = 50)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "subject_generator")
     @Column(name = "subject_id")
-    private String id;
+    private Integer id;
 
     private String name;
 
-    public String getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -28,5 +28,10 @@ public class Subject implements Serializable {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    @Override
+    public String toString() {
+        return name;
     }
 }
