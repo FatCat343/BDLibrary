@@ -56,7 +56,7 @@ public class EditionView extends VerticalLayout {
         grid.setSizeFull();
         grid.removeAllColumns();;
         grid.addColumn(Edition::getCode).setHeader("Edition Code").setSortProperty("code");
-        grid.addColumn(Edition::getPosition).setHeader("Publication").setSortProperty("publication");
+        grid.addColumn(Edition::getPublication).setHeader("Publication").setSortProperty("publication");
         grid.addColumn(Edition::getPosition).setHeader("Edition Placement").setSortProperty("position");
         grid.addColumn(Edition::getDateArrived).setHeader("Edition Date of Arrival").setSortProperty("dateArrived");
         grid.addColumn(Edition::getDateLeft).setHeader("Edition Date of Leaving").setSortProperty("dateLeft");
@@ -66,8 +66,12 @@ public class EditionView extends VerticalLayout {
                 closeIndoorEditionEditor();
                 closeOutdoorEditionEditor();
             }
-            if (indoorEditionService.find(edition) != null) editIndoorEdition(indoorEditionService.findFetch(edition));
-            if (outdoorEditionService.find(edition) != null) editOutdoorEdition(outdoorEditionService.findFetch(edition));
+            else {
+                if (indoorEditionService.find(edition) != null)
+                    editIndoorEdition(indoorEditionService.findFetch(edition));
+                if (outdoorEditionService.find(edition) != null)
+                    editOutdoorEdition(outdoorEditionService.findFetch(edition));
+            }
         });
     }
 
