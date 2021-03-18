@@ -7,6 +7,8 @@ import com.vaadin.flow.templatemodel.AllowClientUpdates;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -34,5 +36,16 @@ public class ReaderService {
         //System.out.println(readerRepository.findReaderByPublication(name));
 
         return readerRepository.findReaderByPublication(name);
+    }
+
+    public List<Reader> findReaderByEdition(Integer code) {
+        //System.out.println(name);
+        //System.out.println(readerRepository.findReaderByPublication(name));
+        if (code == null) return new ArrayList<Reader>();
+        else return readerRepository.findReaderByEdition(code);
+    }
+
+    public List<Object[]> findReaderAndEditionByPublicationAndDate(String title, LocalDate start, LocalDate finish) {
+        return readerRepository.findReaderAndEditionByPublicationAndDate(title, start, finish);
     }
 }

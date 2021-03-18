@@ -5,35 +5,36 @@ import com.bdcourse.library.library.Library;
 import com.bdcourse.library.reader.Reader;
 import com.bdcourse.library.reader.ReaderService;
 import com.vaadin.flow.component.grid.Grid;
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
-import com.vaadin.flow.component.textfield.IntegerField;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.value.ValueChangeMode;
 import com.vaadin.flow.router.Route;
+import org.vaadin.klaudeta.PaginatedGrid;
 
-@Route(value = "FindReadersByEdition", layout = MainView.class)
-public class FindReadersByEdition extends VerticalLayout {
+@Route(value = "FindReadersByPublication", layout = MainView.class)
+public class FindReadersByPublication extends VerticalLayout {
     private ReaderService readerService;
     private Grid<Reader> grid = new Grid<>(Reader.class);
     //private String name;
-    private IntegerField editionCodeField = new IntegerField("Edition Code");
+    private TextField publicationNameField = new TextField("Publication Name");
 
 
-    public FindReadersByEdition(ReaderService readerService) {
+    public FindReadersByPublication(ReaderService readerService) {
         this.readerService = readerService;
         //addClassName("reader-layout");
         setSizeFull();
         configureGrid();
         add(configureToolBar(), grid);
-        updateList(null);
+        updateList("");
     }
 
-    private IntegerField configureToolBar() {
-        editionCodeField.setPlaceholder("Enter Name of Publication");
-        editionCodeField.setClearButtonVisible(true);
-        editionCodeField.setValueChangeMode(ValueChangeMode.LAZY);
-        editionCodeField.addValueChangeListener(event -> updateList(event.getValue()));
-        return editionCodeField;
+    private TextField configureToolBar() {
+        publicationNameField.setPlaceholder("Enter Name of Publication");
+        publicationNameField.setClearButtonVisible(true);
+        publicationNameField.setValueChangeMode(ValueChangeMode.LAZY);
+        publicationNameField.addValueChangeListener(event -> updateList(event.getValue()));
+        return publicationNameField;
     }
 
     private void configureGrid() {
@@ -48,8 +49,8 @@ public class FindReadersByEdition extends VerticalLayout {
 
     }
 
-    private void updateList(Integer code) {
-        grid.setItems(readerService.findReaderByEdition(code));
+    private void updateList(String name) {
+        grid.setItems(readerService.findReaderByPublication(name));
     }
 
 

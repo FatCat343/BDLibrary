@@ -7,9 +7,7 @@ import com.bdcourse.library.UI.DissertationUI.DissertationView;
 import com.bdcourse.library.UI.DistributionUI.DistributionView;
 import com.bdcourse.library.UI.EditionUI.EditionView;
 import com.bdcourse.library.UI.LibraryUI.LibraryView;
-import com.bdcourse.library.UI.QueriesUI.FindEditionByAuthorOrPublication;
-import com.bdcourse.library.UI.QueriesUI.FindPublicationByPopularity;
-import com.bdcourse.library.UI.QueriesUI.FindReadersByEdition;
+import com.bdcourse.library.UI.QueriesUI.*;
 import com.bdcourse.library.UI.StaffUI.StaffView;
 import com.bdcourse.library.UI.StorageUI.StorageView;
 import com.bdcourse.library.UI.StudentUI.StudentView;
@@ -37,9 +35,16 @@ public class MainView extends AppLayout {
         author.getSubMenu().addItem(new RouterLink("Authors", AuthorView.class));
         readers.getSubMenu().addItem(new RouterLink("Students", StudentView.class));
         readers.getSubMenu().addItem(new RouterLink("Workers", WorkerView.class));
-        queries.getSubMenu().addItem(new RouterLink("Find Reader by Publication Name", FindReadersByEdition.class));
-        queries.getSubMenu().addItem(new RouterLink("Get Publications by Popularity", FindPublicationByPopularity.class));
-        queries.getSubMenu().addItem(new RouterLink("Find Edition By Publication Or Author", FindEditionByAuthorOrPublication.class));
+        queries.getSubMenu().addItem(
+                new RouterLink("Find Reader by Publication Name", FindReadersByPublication.class));
+        queries.getSubMenu().addItem(
+                new RouterLink("Find Reader by Edition Code", FindReadersByEdition.class));
+        queries.getSubMenu().addItem(
+                new RouterLink("Get Publications by Popularity", FindPublicationByPopularity.class));
+        queries.getSubMenu().addItem(
+                new RouterLink("Find Edition By Publication Or Author", FindEditionByAuthorOrPublication.class));
+        queries.getSubMenu().addItem(
+                new RouterLink("Find Reader And Edition By Publication And Date", FindReaderAndEditionByPublicationAndDate.class));
         staff.getSubMenu().addItem(new RouterLink("Staff", StaffView.class));
         bookPosition.getSubMenu().addItem(new RouterLink("BookPositions", BookPositionView.class));
         distribution.getSubMenu().addItem(new RouterLink("Distribution", DistributionView.class));
