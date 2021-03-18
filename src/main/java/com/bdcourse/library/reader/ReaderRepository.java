@@ -10,7 +10,7 @@ import java.util.List;
 public interface ReaderRepository extends CrudRepository<Reader, Integer> {
 
     @Override
-    @Query(value = "SELECT *, 0 AS clazz_ FROM library_schema.reader r WHERE r.reader_id != 0", nativeQuery = true)
+    @Query(value = "SELECT *, 0 AS clazz_ FROM library_schema.reader r WHERE r.reader_id != 0 ORDER BY r.reader_id ASC", nativeQuery = true)
     Iterable<Reader> findAll();
 
     //2 query
