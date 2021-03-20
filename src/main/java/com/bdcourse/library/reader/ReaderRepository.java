@@ -85,7 +85,20 @@ public interface ReaderRepository extends CrudRepository<Reader, Integer> {
             "WHERE \n" +
             "    d.date_give + o.rental_period < NOW ()", nativeQuery = true)
     List<Reader> findReaderExpired();
-//
-//    //13 query
-//    List<Reader> findReaderByAvoidingLibraryAndDate();
+
+    //13 query
+    @Query(value = "SELECT \n" +
+            "    r.*, 0 AS clazz_\n" +
+            "FROM \n" +
+            "    library_schema.reader r \n" +
+            "WHERE \n" +
+            "    r.reader_id > 0 AND " +
+            "    r.reader_id NOT IN (SELECT \n" +
+            "                d.reader_id\n" +
+            "            FROM \n" +
+            "                library_schema.distribution d\n" +
+            "            WHERE \n" +
+            "                d.date_give BETWEEN :start AND :finish \n" +
+            "                OR d.date_return BETWEEN :start AND :finish)", nativeQuery = true)
+    List<Reader> findReaderByAvoidingLibraryAndDate(@Param("start") LocalDate start, @Param("finish") LocalDate finish);
 }

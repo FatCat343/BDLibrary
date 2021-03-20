@@ -56,4 +56,8 @@ public class ReaderService {
     public List<Reader> findReaderExpired() {
         return readerRepository.findReaderExpired();
     }
+
+    public List<Reader> findReaderByAvoidingLibraryAndDate(LocalDate start, LocalDate finish) {
+        return readerRepository.findReaderByAvoidingLibraryAndDate(start, finish);
+    }
 }
