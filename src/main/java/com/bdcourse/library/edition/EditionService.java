@@ -45,4 +45,9 @@ public class EditionService {
     public List<Edition> findEditionByReaderInNotAssignedLibrary(String firstName, String lastName, LocalDate start, LocalDate finish) {
         return editionRepository.findEditionByReaderInNotAssignedLibrary(firstName, lastName, start, finish);
     }
+
+    public List<Edition> findGivenEditionByPosition(String address, Integer room, Integer rack, Integer shelf) {
+        System.out.println("find in address = " + address + ", room = " + room + ", rack = " + rack + ", shelf = " + shelf);
+        return editionRepository.findGivenEditionByPosition(address, room, rack, shelf);
+    }
 }

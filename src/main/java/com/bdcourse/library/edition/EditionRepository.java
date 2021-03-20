@@ -21,7 +21,8 @@ public interface EditionRepository extends CrudRepository<Edition, Integer> {
 
 //    @Query(value = "SELECT d FROM Distribution d JOIN FETCH d.edition e WHERE d.id = :id")
 //    Edition findEditionByIdFetchPublication(@Param("id") Integer id);
-        //5 query
+
+    //5 query
     @Query(value = "SELECT \n" +
             "    e.*, 0 AS clazz_ \n" +
             "FROM\n" +
@@ -39,9 +40,8 @@ public interface EditionRepository extends CrudRepository<Edition, Integer> {
                                                        @Param("lastname") String lastName,
                                                        @Param("start") LocalDate start,
                                                        @Param("finish") LocalDate finish);
-//
     //6 query
-@Query(value = "SELECT \n" +
+    @Query(value = "SELECT \n" +
         "    e.*, 0 AS clazz_ \n" +
         "FROM\n" +
         "    library_schema.edition e\n" +
@@ -58,9 +58,24 @@ public interface EditionRepository extends CrudRepository<Edition, Integer> {
                                                           @Param("lastname") String lastName,
                                                           @Param("start") LocalDate start,
                                                           @Param("finish") LocalDate finish);
-//
-//    //7 query
-//    List<Edition> findGivenEditionByPosition();
+
+    //7 query
+    @Query(value = "SELECT \n" +
+            "    e.*, 0 AS clazz_\n" +
+            "FROM \n" +
+            "    library_schema.edition e \n" +
+            "    JOIN library_schema.distribution d ON e.edition_id = d.edition_id \n" +
+            "    JOIN library_schema.bookposition p ON e.position_id = p.position_id \n" +
+            "    JOIN library_schema.storage s ON p.storage_id = s.storage_id \n" +
+            "    JOIN library_schema.library l ON l.library_id=s.library_id\n" +
+            "WHERE \n" +
+            "    d.date_return IS NULL \n" +
+            "    AND l.address = :address \n" +
+            "    AND s.room_number = :room \n" +
+            "    AND p.rack_number = :rack \n" +
+            "    AND p.shelf_number = :shelf", nativeQuery = true)
+    List<Edition> findGivenEditionByPosition(@Param("address") String address, @Param("room") Integer room,
+                                             @Param("rack") Integer rack, @Param("shelf") Integer shelf);
 //
 //    //11 query
 //    List <Edition> findEditionByArrivedDate();
