@@ -1,5 +1,6 @@
 package com.bdcourse.library.staff;
 
+import com.bdcourse.library.storage.Storage;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
@@ -35,5 +36,5 @@ public interface StaffRepository extends CrudRepository<Staff, Integer> {
 //    //12 query
 //    List<Staff> findStaffByStorage();
 
-
+    List<Staff> findAllByStorage(Storage storage);
 }

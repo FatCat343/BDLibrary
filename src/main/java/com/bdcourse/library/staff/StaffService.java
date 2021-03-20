@@ -1,5 +1,6 @@
 package com.bdcourse.library.staff;
 
+import com.bdcourse.library.storage.Storage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -34,5 +35,9 @@ public class StaffService {
 
     public List<Object[]> findStaffProductivityByDate(LocalDate start, LocalDate finish) {
         return staffRepository.findStaffProductivityByDate(start, finish);
+    }
+
+    public List<Staff> findAllByStorage(Storage storage) {
+        return staffRepository.findAllByStorage(storage);
     }
 }

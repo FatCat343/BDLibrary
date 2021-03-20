@@ -3,8 +3,10 @@ package com.bdcourse.library.UI.StaffUI;
 import com.bdcourse.library.UI.MainView;
 import com.bdcourse.library.staff.Staff;
 import com.bdcourse.library.staff.StaffService;
+import com.bdcourse.library.storage.Storage;
 import com.bdcourse.library.storage.StorageService;
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -18,8 +20,9 @@ import com.vaadin.flow.router.Route;
 public class StaffView extends VerticalLayout {
     private StaffService staffService;
     private Grid<Staff> grid = new Grid<>(Staff.class);
-
+    private ComboBox<Storage> storageComboBox = new ComboBox<Storage>();
     private StaffForm form;
+    private Storage storage = null;
 
     public StaffView(StaffService staffService, StorageService storageService) {
         this.staffService = staffService;
@@ -31,7 +34,7 @@ public class StaffView extends VerticalLayout {
         form.addListener(StaffForm.deleteEvent.class, this::deleteStaff);
         form.addListener(StaffForm.closeEvent.class, e -> closeEditor());
         add(toolbar, form, grid);
-
+        storageComboBox.setItems(storageService.findAll());
         updateList();
         closeEditor();
     }
@@ -41,10 +44,7 @@ public class StaffView extends VerticalLayout {
         grid.removeAllColumns();
         grid.addColumn(Staff::getFirstName).setHeader("FirstName").setSortProperty("firstname");
         grid.addColumn(Staff::getLastName).setHeader("LastName").setSortProperty("lastname");
-        //grid.addColumn(staff -> staff.initi)
-        //grid.setSelectionMode(Sele)
         grid.asSingleSelect().addValueChangeListener(event -> editStaff(event.getValue()));
-        //grid.addListener(event -> event.isDoubleClick() ? );
         grid.setItemDetailsRenderer(TemplateRenderer.<Staff>of(
                 "<div class='custom-details' style='border: 1px solid gray; padding: 10px; width: 100%; box-sizing: border-box;'>"
                         + "<div>Assigned to storage : <b>[[item.storage]]!</b></div>"
@@ -60,13 +60,18 @@ public class StaffView extends VerticalLayout {
 
         grid.addColumn(new NativeButtonRenderer<>("Details", item -> grid
                 .setDetailsVisible(item, !grid.isDetailsVisible(item))));
-
     }
 
     private HorizontalLayout configureToolBar() {
+        storageComboBox.setPlaceholder("Select Storage");
+        storageComboBox.setClearButtonVisible(true);
+        storageComboBox.addValueChangeListener(event -> {
+            storage = event.getValue();
+            updateList();
+        });
         Button addStaffButton = new Button("Add Staff");
         addStaffButton.addClickListener(click -> addStaff());
-        return new HorizontalLayout(addStaffButton);
+        return new HorizontalLayout(addStaffButton, storageComboBox);
     }
 
     private void addStaff() {
@@ -77,7 +82,8 @@ public class StaffView extends VerticalLayout {
     }
 
     private void updateList(){
-        grid.setItems(staffService.findAll());
+        if (storage == null) grid.setItems(staffService.findAll());
+        else grid.setItems(staffService.findAllByStorage(storage));
     }
 
     private void saveStaff(StaffForm.saveEvent event) {
