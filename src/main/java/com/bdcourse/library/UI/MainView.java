@@ -53,6 +53,10 @@ public class MainView extends AppLayout {
                 new RouterLink("Find Reader By Staff And Date", FindReaderByStaffAndDate.class));
         queries.getSubMenu().addItem(
                 new RouterLink("Find Staff Productivity By Date", FindStaffProductivityByDate.class));
+        queries.getSubMenu().addItem(
+                new RouterLink("Find Reader Expired", FindReaderExpired.class));
+        queries.getSubMenu().addItem(
+                new RouterLink("Find Edition By Arrived Date", FindEditionByArrivedDate.class));
         staff.getSubMenu().addItem(new RouterLink("Staff", StaffView.class));
         bookPosition.getSubMenu().addItem(new RouterLink("BookPositions", BookPositionView.class));
         distribution.getSubMenu().addItem(new RouterLink("Distribution", DistributionView.class));

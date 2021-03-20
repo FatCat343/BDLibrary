@@ -52,4 +52,8 @@ public class ReaderService {
     public List<Reader> findReaderByStaffAndDate(Integer staffId, LocalDate start, LocalDate finish) {
         return readerRepository.findReaderByStaffAndDate(staffId, start, finish);
     }
+
+    public List<Reader> findReaderExpired() {
+        return readerRepository.findReaderExpired();
+    }
 }
