@@ -76,9 +76,17 @@ public interface EditionRepository extends CrudRepository<Edition, Integer> {
             "    AND p.shelf_number = :shelf", nativeQuery = true)
     List<Edition> findGivenEditionByPosition(@Param("address") String address, @Param("room") Integer room,
                                              @Param("rack") Integer rack, @Param("shelf") Integer shelf);
-//
-//    //11 query
-//    List <Edition> findEditionByArrivedDate();
+
+    //11 query
+    @Query(value = "SELECT \n" +
+            "    e.edition_code, p.title, a.firstname, a.lastname\n" +
+            "FROM \n" +
+            "    library_schema.edition e \n" +
+            "    JOIN library_schema.publication p ON p.publication_id = e.publication_id\n" +
+            "    JOIN library_schema.author a ON a.author_id = p.author_id\n" +
+            "WHERE \n" +
+            "    e.date_arrived BETWEEN :start AND :finish ", nativeQuery = true)
+    List <Object[]> findEditionByArrivedDate(@Param("start") LocalDate start, @Param("finish") LocalDate finish);
 //
 //    List<Edition> findEditionByLeftDate();
 //

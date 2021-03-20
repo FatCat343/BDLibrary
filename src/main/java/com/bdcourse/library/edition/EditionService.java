@@ -50,4 +50,8 @@ public class EditionService {
         System.out.println("find in address = " + address + ", room = " + room + ", rack = " + rack + ", shelf = " + shelf);
         return editionRepository.findGivenEditionByPosition(address, room, rack, shelf);
     }
+
+    public List<Object[]> findEditionByArrivedDate(LocalDate start, LocalDate finish) {
+        return editionRepository.findEditionByArrivedDate(start, finish);
+    }
 }
