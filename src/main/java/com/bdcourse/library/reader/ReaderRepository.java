@@ -45,7 +45,7 @@ public interface ReaderRepository extends CrudRepository<Reader, Integer> {
             "                        e.edition_code = :code\n" +
             "                        AND d.date_return IS NULL)", nativeQuery = true)
     List<Reader> findReaderByEdition(@Param("code") int code);
-//
+
     //4 query
     @Query(value = "SELECT\n" +
             "    r.firstname, r.lastname, e.edition_code\n" +
@@ -60,9 +60,19 @@ public interface ReaderRepository extends CrudRepository<Reader, Integer> {
     List<Object[]> findReaderAndEditionByPublicationAndDate(@Param("title") String title,
                                                         @Param("start")LocalDate start,
                                                         @Param("finish") LocalDate finish);
-//
-//    //8 query
-//    List<Reader> findReaderByStaffAndDate();
+
+    //8 query
+    @Query(value = "SELECT \n" +
+            "    r.*, 0 AS  clazz_\n" +
+            "FROM \n" +
+            "    library_schema.reader r \n" +
+            "    JOIN library_schema.distribution d ON d.reader_id = r.reader_id\n" +
+            "    JOIN library_schema.staff s ON s.staff_id = d.staff_id\n" +
+            "WHERE \n" +
+            "    s.staff_id = :id\n" +
+            "    AND d.date_give BETWEEN :start AND :finish", nativeQuery = true)
+    List<Reader> findReaderByStaffAndDate(@Param("id") Integer staffId, @Param("start") LocalDate start,
+                                          @Param("finish") LocalDate finish);
 //
 //    //10 query
 //    List<Reader> findReaderExpired();

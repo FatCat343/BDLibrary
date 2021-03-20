@@ -48,4 +48,8 @@ public class ReaderService {
     public List<Object[]> findReaderAndEditionByPublicationAndDate(String title, LocalDate start, LocalDate finish) {
         return readerRepository.findReaderAndEditionByPublicationAndDate(title, start, finish);
     }
+
+    public List<Reader> findReaderByStaffAndDate(Integer staffId, LocalDate start, LocalDate finish) {
+        return readerRepository.findReaderByStaffAndDate(staffId, start, finish);
+    }
 }
