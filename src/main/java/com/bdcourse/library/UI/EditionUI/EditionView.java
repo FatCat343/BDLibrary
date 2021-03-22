@@ -10,11 +10,18 @@ import com.bdcourse.library.edition.indoorEdition.IndoorEditionService;
 import com.bdcourse.library.edition.outdoorEdition.OutdoorEdition;
 import com.bdcourse.library.edition.outdoorEdition.OutdoorEditionService;
 import com.bdcourse.library.publication.PublicationService;
+import com.bdcourse.library.staff.Staff;
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.combobox.ComboBox;
+import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.data.renderer.NativeButtonRenderer;
+import com.vaadin.flow.data.renderer.TemplateRenderer;
 import com.vaadin.flow.router.Route;
+
+import java.time.LocalDate;
 
 
 @Route(value = "edition", layout = MainView.class)
@@ -25,6 +32,13 @@ public class EditionView extends VerticalLayout {
     private OutdoorEditionService outdoorEditionService;
     private IndoorEditionForm indoorEditionForm;
     private OutdoorEditionForm outdoorEditionForm;
+
+    private ComboBox<String> filterVariants = new ComboBox<>("Filter By:");
+    private DatePicker startDate = new DatePicker("From:");
+    private DatePicker finishDate = new DatePicker("To:");
+    private Boolean isArrived = null;
+    private LocalDate start = null;
+    private LocalDate finish = null;
 
     public EditionView(IndoorEditionService indoorEditionService, OutdoorEditionService outdoorEditionService,
                        PublicationService publicationService, BookPositionService bookPositionService,
@@ -57,9 +71,32 @@ public class EditionView extends VerticalLayout {
         grid.removeAllColumns();;
         grid.addColumn(Edition::getCode).setHeader("Edition Code").setSortProperty("code");
         grid.addColumn(Edition::getPublication).setHeader("Publication").setSortProperty("publication");
-        grid.addColumn(Edition::getPosition).setHeader("Edition Placement").setSortProperty("position");
+        //grid.addColumn(Edition::getPosition).setHeader("Edition Placement").setSortProperty("position");
         grid.addColumn(Edition::getDateArrived).setHeader("Edition Date of Arrival").setSortProperty("dateArrived");
         grid.addColumn(Edition::getDateLeft).setHeader("Edition Date of Leaving").setSortProperty("dateLeft");
+        grid.setItemDetailsRenderer(TemplateRenderer.<Edition>of(
+                "<div class='custom-details' style='border: 1px solid gray; padding: 10px; width: 100%; box-sizing: border-box;'>"
+                        + "<div>Assigned to storage : <b>[[item.storage]]</b></div>"
+                        + "<div><b>[[item.info]]</b></div>"
+                        + "</div>")
+                .withProperty("storage", edition -> edition.getPosition().toString())
+                .withProperty("info", edition -> {
+                    if (indoorEditionService.find(edition) != null) return "Reason for indoor usage only: " +
+                            indoorEditionService.findFetch(edition).getReason();
+                    else {
+                        if (outdoorEditionService.find(edition) != null) return "Rental period: " +
+                                outdoorEditionService.findFetch(edition).getRentalPeriod() + " days";
+                    }
+                    return "";
+                })
+                // This is now how we open the details
+                .withEventHandler("handleClick", edition -> {
+                    grid.getDataProvider().refreshItem(edition);
+                }));
+        grid.setDetailsVisibleOnClick(false);
+
+        grid.addColumn(new NativeButtonRenderer<>("Details", item -> grid
+                .setDetailsVisible(item, !grid.isDetailsVisible(item))));
         grid.asSingleSelect().addValueChangeListener(event -> {
             Edition edition = event.getValue();
             if (edition == null) {
@@ -80,7 +117,28 @@ public class EditionView extends VerticalLayout {
         addIndoorEditionButton.addClickListener(click -> addIndoorEdition());
         Button addOutdoorEditionButton = new Button("Add Outdoor Edition");
         addOutdoorEditionButton.addClickListener(click -> addOutdoorEdition());
-        return new HorizontalLayout(addIndoorEditionButton, addOutdoorEditionButton);
+
+        filterVariants.setItems("Arrival Date", "Leaving Date");
+        filterVariants.setClearButtonVisible(true);
+        filterVariants.addValueChangeListener(event -> {
+            if (event.getValue().equals("Arrival Date")) isArrived = true;
+            else {
+                if (event.getValue().equals("Arrival Date")) isArrived = false;
+                else isArrived = null;
+            }
+            updateList();
+        });
+
+        startDate.addValueChangeListener(event -> {
+            start = event.getValue();
+            updateList();
+        });
+        finishDate.addValueChangeListener(event -> {
+            finish = event.getValue();
+            updateList();
+        });
+
+        return new HorizontalLayout(addIndoorEditionButton, addOutdoorEditionButton, filterVariants, startDate, finishDate);
     }
 
     private void addIndoorEdition() {
@@ -96,7 +154,12 @@ public class EditionView extends VerticalLayout {
     }
 
     private void updateList() {
-        grid.setItems(editionService.findAllFetchAll());
+        if (isArrived == null) {
+            grid.setItems(editionService.findAllFetchAll());
+        }
+        else {
+
+        }
     }
 
     private void saveIndoorEdition(IndoorEditionForm.saveEvent event) {

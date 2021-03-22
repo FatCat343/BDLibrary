@@ -1,14 +1,12 @@
 package com.bdcourse.library.UI.QueriesUI;
 
 import com.bdcourse.library.UI.MainView;
-import com.bdcourse.library.library.Library;
-import com.bdcourse.library.reader.Reader;
-import com.bdcourse.library.reader.ReaderService;
+import com.bdcourse.library.distribution.Distribution;
+import com.bdcourse.library.distribution.DistributionService;
 import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
-import com.vaadin.flow.component.textfield.IntegerField;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.value.ValueChangeMode;
 import com.vaadin.flow.router.Route;
@@ -22,16 +20,13 @@ public class FindReaderAndEditionByPublicationAndDate extends VerticalLayout {
     private TextField titleTextField = new TextField("Publication Title");
 
     private String title = null;
-    private LocalDate start = null;
-    private LocalDate finish = null;
 
-    private ReaderService readerService;
-    private Grid<Object[]> grid = new Grid<>();
+    private DistributionService distributionService;
+    private Grid<Distribution> grid = new Grid<>();
 
 
-    public FindReaderAndEditionByPublicationAndDate(ReaderService readerService) {
-        this.readerService = readerService;
-        //addClassName("reader-layout");
+    public FindReaderAndEditionByPublicationAndDate(DistributionService distributionService) {
+        this.distributionService = distributionService;
         setSizeFull();
         configureGrid();
         add(configureToolBar(), grid);
@@ -41,6 +36,7 @@ public class FindReaderAndEditionByPublicationAndDate extends VerticalLayout {
     private HorizontalLayout configureToolBar() {
         titleTextField.setPlaceholder("Enter Title of Publication");
         titleTextField.setClearButtonVisible(true);
+        titleTextField.setRequired(true);
         titleTextField.setValueChangeMode(ValueChangeMode.LAZY);
         titleTextField.addValueChangeListener(event -> {
             title = event.getValue();
@@ -48,34 +44,36 @@ public class FindReaderAndEditionByPublicationAndDate extends VerticalLayout {
         });
 
         startDate.addValueChangeListener(event -> {
-            start = event.getValue();
+            LocalDate selected = event.getValue();
+            if (selected != null) {
+                finishDate.setMin(selected.plusDays(1));
+            } else {
+                finishDate.setMin(null);
+            }
             updateList();
         });
         finishDate.addValueChangeListener(event -> {
-            finish = event.getValue();
+            LocalDate selected = event.getValue();
+            if (selected != null) {
+                startDate.setMax(selected.minusDays(1));
+            } else {
+                startDate.setMax(null);
+            }
             updateList();
         });
         return new HorizontalLayout(titleTextField, startDate, finishDate);
     }
 
     private void configureGrid() {
-        //grid.setClassName("query-grid");
         grid.setSizeFull();
-        grid.addColumn(objects -> {
-            String firstName = (String) objects[0];
-            String lastName = (String) objects[1];
-            return firstName + " " + lastName;
-        }).setHeader("Reader").setSortProperty("reader");
-        grid.addColumn(objects -> {
-            Integer code = (Integer) objects[2];
-            return code;
-        }).setHeader("Edition Code").setSortProperty("code");
-        //grid.setItems(readerService.findReaderByPublication(""));
+        grid.addColumn(distribution -> distribution.getReader().toString()).setHeader("Reader").setSortProperty("reader");
+        grid.addColumn(distribution -> distribution.getEdition().getCode()).setHeader("Edition Code").setSortProperty("code");
     }
 
     private void updateList() {
-        if (title != null && start != null && finish != null) {
-            grid.setItems(readerService.findReaderAndEditionByPublicationAndDate(title, start, finish));
+        if (title != null) {
+            grid.setItems(distributionService.findReaderAndEditionByPublicationAndDate(title, startDate.getValue(),
+                    finishDate.getValue()));
         }
     }
 }

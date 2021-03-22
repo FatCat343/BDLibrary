@@ -9,7 +9,7 @@ import java.util.List;
 
 public interface OutdoorEditionRepository extends CrudRepository<OutdoorEdition, Integer> {
     @Query(value = "SELECT e FROM Edition e JOIN FETCH e.publication publ JOIN FETCH e.position pos " +
-            "JOIN FETCH pos.storage stor WHERE e.edition_id = :id")
+            "JOIN FETCH pos.storage stor WHERE e.id = :id")
     OutdoorEdition findOutdoorEditionByIdFetchAll(@Param("id") Integer id);
 
 }

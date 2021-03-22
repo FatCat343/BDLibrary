@@ -22,15 +22,21 @@ public interface StaffRepository extends CrudRepository<Staff, Integer> {
 
     //9 query
     @Query(value = "SELECT \n" +
-            "    s.firstname, s.lastname, COUNT(*) AS served_clients\n" +
-            "FROM \n" +
-            "    library_schema.reader r \n" +
-            "    JOIN library_schema.distribution d ON d.reader_id = r.reader_id\n" +
-            "    JOIN library_schema.staff s ON s.staff_id = d.staff_id\n" +
+            "    s.firstname, s.lastname,case when COUNT(*) > 1 then COUNT(*) else 0 end AS served_clients\n" +
+            "FROM (SELECT\n" +
+            "        d.*\n" +
+            "    FROM\n" +
+            "        library_schema.distribution d \n" +
+            "    WHERE \n" +
+            "        d.date_give BETWEEN :start AND :finish ) AS distr\n" +
+            "    JOIN library_schema.reader r ON distr.reader_id = r.reader_id\n" +
+            "    FULL OUTER JOIN library_schema.staff s ON s.staff_id = distr.staff_id\n" +
             "WHERE \n" +
-            "    d.date_give BETWEEN :start AND :finish \n" +
+            "\ts.staff_id != 0\n" +
             "GROUP BY \n" +
-            "    s.staff_id", nativeQuery = true)
+            "    s.staff_id\n" +
+            "ORDER BY \n" +
+            "\ts.staff_id ASC", nativeQuery = true)
     List<Object[]> findStaffProductivityByDate(@Param("start")LocalDate start, @Param("finish") LocalDate finish);
 //
 //    //12 query

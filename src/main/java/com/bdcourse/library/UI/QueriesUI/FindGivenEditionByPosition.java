@@ -39,6 +39,7 @@ public class FindGivenEditionByPosition extends VerticalLayout {
 
     private HorizontalLayout configureToolBar() {
         roomField.setClearButtonVisible(true);
+        roomField.setRequiredIndicatorVisible(true);
         roomField.setValueChangeMode(ValueChangeMode.LAZY);
         roomField.addValueChangeListener(event -> {
             room = event.getValue();
@@ -46,6 +47,7 @@ public class FindGivenEditionByPosition extends VerticalLayout {
         });
 
         rackField.setClearButtonVisible(true);
+        rackField.setRequiredIndicatorVisible(true);
         rackField.setValueChangeMode(ValueChangeMode.LAZY);
         rackField.addValueChangeListener(event -> {
             rack = event.getValue();
@@ -53,6 +55,7 @@ public class FindGivenEditionByPosition extends VerticalLayout {
         });
 
         shelfField.setClearButtonVisible(true);
+        shelfField.setRequiredIndicatorVisible(true);
         shelfField.setValueChangeMode(ValueChangeMode.LAZY);
         shelfField.addValueChangeListener(event -> {
             shelf = event.getValue();
@@ -60,6 +63,7 @@ public class FindGivenEditionByPosition extends VerticalLayout {
         });
 
         libraries.setClearButtonVisible(true);
+        libraries.setRequired(true);
         libraries.addValueChangeListener(event -> {
             if (event.getValue() != null) address = event.getValue().getAddress();
             updateList();
@@ -69,17 +73,7 @@ public class FindGivenEditionByPosition extends VerticalLayout {
 
     private void configureGrid() {
         grid.setSizeFull();
-//        grid.addColumn(objects -> {
-//            String firstName = (String) objects[0];
-//            String lastName = (String) objects[1];
-//            return firstName + " " + lastName;
-//        }).setHeader("Reader").setSortProperty("reader");
-//        grid.addColumn(objects -> {
-//            Integer code = (Integer) objects[2];
-//            return code;
-//        }).setHeader("Edition Code").setSortProperty("code");
         grid.setColumns("code", "dateArrived", "dateLeft");
-        //grid.setItems(readerService.findReaderByPublication(""));
     }
 
     private void updateList() {

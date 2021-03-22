@@ -3,9 +3,6 @@ package com.bdcourse.library.UI.QueriesUI;
 import com.bdcourse.library.UI.MainView;
 import com.bdcourse.library.reader.Reader;
 import com.bdcourse.library.reader.ReaderService;
-import com.bdcourse.library.staff.Staff;
-import com.bdcourse.library.staff.StaffService;
-import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
@@ -18,9 +15,6 @@ import java.time.LocalDate;
 public class FindReaderByAvoidingLibraryAndDate extends VerticalLayout {
     private DatePicker startDate = new DatePicker("From:");
     private DatePicker finishDate = new DatePicker("To:");
-
-    private LocalDate start = null;
-    private LocalDate finish = null;
 
     private ReaderService readerService;
     private Grid<Reader> grid = new Grid<>(Reader.class);
@@ -36,26 +30,32 @@ public class FindReaderByAvoidingLibraryAndDate extends VerticalLayout {
 
     private HorizontalLayout configureToolBar() {
         startDate.addValueChangeListener(event -> {
-            start = event.getValue();
+            LocalDate selected = event.getValue();
+            if (selected != null) {
+                finishDate.setMin(selected.plusDays(1));
+            } else {
+                finishDate.setMin(null);
+            }
             updateList();
         });
         finishDate.addValueChangeListener(event -> {
-            finish = event.getValue();
+            LocalDate selected = event.getValue();
+            if (selected != null) {
+                startDate.setMax(selected.minusDays(1));
+            } else {
+                startDate.setMax(null);
+            }
             updateList();
         });
         return new HorizontalLayout(startDate, finishDate);
     }
 
     private void configureGrid() {
-        //grid.setClassName("query-grid");
         grid.setSizeFull();
         grid.setColumns("firstName", "lastName");
-        //grid.setItems(readerService.findReaderByPublication(""));
     }
 
     private void updateList() {
-        if (start != null && finish != null) {
-            grid.setItems(readerService.findReaderByAvoidingLibraryAndDate(start, finish));
-        }
+        grid.setItems(readerService.findReaderByAvoidingLibraryAndDate(startDate.getValue(), finishDate.getValue()));
     }
 }

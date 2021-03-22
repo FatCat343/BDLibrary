@@ -34,6 +34,7 @@ public class StaffService {
     }
 
     public List<Object[]> findStaffProductivityByDate(LocalDate start, LocalDate finish) {
+        System.out.println("start = " + start + ", finish = " + finish);
         return staffRepository.findStaffProductivityByDate(start, finish);
     }
 

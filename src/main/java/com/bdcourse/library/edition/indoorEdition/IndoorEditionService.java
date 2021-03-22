@@ -18,10 +18,10 @@ public class IndoorEditionService {
     }
 
     public IndoorEdition find(Edition edition) {
-        return indoorEditionRepository.findById(edition.getEdition_id()).orElse(null);
+        return indoorEditionRepository.findById(edition.getId()).orElse(null);
     }
 
     public IndoorEdition findFetch(Edition edition) {
-        return indoorEditionRepository.findIndoorEditionByIdFetchAll(edition.getEdition_id());
+        return indoorEditionRepository.findIndoorEditionByIdFetchAll(edition.getId());
     }
 }

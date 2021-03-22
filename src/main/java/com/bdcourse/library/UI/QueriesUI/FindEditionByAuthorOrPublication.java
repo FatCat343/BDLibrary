@@ -3,7 +3,6 @@ package com.bdcourse.library.UI.QueriesUI;
 import com.bdcourse.library.UI.MainView;
 import com.bdcourse.library.edition.Edition;
 import com.bdcourse.library.edition.EditionService;
-import com.bdcourse.library.library.Library;
 import com.bdcourse.library.publication.Publication;
 import com.bdcourse.library.publication.PublicationService;
 import com.bdcourse.library.publication.author.Author;
@@ -12,8 +11,6 @@ import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
-import com.vaadin.flow.component.textfield.TextField;
-import com.vaadin.flow.data.value.ValueChangeMode;
 import com.vaadin.flow.router.Route;
 
 @Route(value = "FindEditionByAuthorOrPublication", layout = MainView.class)
@@ -31,19 +28,22 @@ public class FindEditionByAuthorOrPublication extends VerticalLayout {
         authorComboBox.setItems(authorService.findAll());
         publicationComboBox.setItems(publicationService.findAll());
         add(configureToolBar(), grid);
-
     }
 
     private HorizontalLayout configureToolBar() {
         authorComboBox.setClearButtonVisible(true);
         authorComboBox.addValueChangeListener(event -> {
-            updateListAuthor(event.getValue());
-            publicationComboBox.clear();
+            if (event.getValue() != null) {
+                updateListAuthor(event.getValue());
+                publicationComboBox.clear();
+            }
         });
         publicationComboBox.setClearButtonVisible(true);
         publicationComboBox.addValueChangeListener(event -> {
-            updateListPublication(event.getValue());
-            authorComboBox.clear();
+            if (event.getValue() != null) {
+                updateListPublication(event.getValue());
+                authorComboBox.clear();
+            }
         });
         return new HorizontalLayout(authorComboBox, publicationComboBox);
     }
@@ -51,7 +51,6 @@ public class FindEditionByAuthorOrPublication extends VerticalLayout {
     private void configureGrid() {
         grid.setSizeFull();
         grid.setColumns("code");
-
     }
 
     private void updateListAuthor(Author author) {

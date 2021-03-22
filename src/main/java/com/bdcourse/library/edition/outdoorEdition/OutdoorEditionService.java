@@ -22,7 +22,7 @@ public class OutdoorEditionService {
 
     public OutdoorEdition find(Edition edition) {
         //long counter = 0;
-        Optional<OutdoorEdition> result = outdoorEditionRepository.findById(edition.getEdition_id());
+        Optional<OutdoorEdition> result = outdoorEditionRepository.findById(edition.getId());
         return result.orElse(null);
 //        return outdoorEditionRepository.findById(edition.getEdition_id()).map(
 //                f -> f.getRentalPeriod()
@@ -30,6 +30,6 @@ public class OutdoorEditionService {
     }
 
     public OutdoorEdition findFetch(Edition edition) {
-        return outdoorEditionRepository.findOutdoorEditionByIdFetchAll(edition.getEdition_id());
+        return outdoorEditionRepository.findOutdoorEditionByIdFetchAll(edition.getId());
     }
 }

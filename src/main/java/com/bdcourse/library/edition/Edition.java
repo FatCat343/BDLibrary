@@ -16,7 +16,7 @@ public class Edition implements Serializable {
     @SequenceGenerator(name = "edition_generator", sequenceName = "edition_seq", initialValue = 70)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "edition_generator")
     @Column(name = "edition_id")
-    private Integer edition_id;
+    private Integer id;
 
     @Column(name = "edition_code")
     private Integer code;
@@ -35,12 +35,12 @@ public class Edition implements Serializable {
     @Column(name = "date_left")
     private LocalDate dateLeft;
 
-    public Integer getEdition_id() {
-        return edition_id;
+    public Integer getId() {
+        return id;
     }
 
-    public void setEdition_id(Integer edition_id) {
-        this.edition_id = edition_id;
+    public void setId(Integer Id) {
+        this.id = Id;
     }
 
     public Integer getCode() {

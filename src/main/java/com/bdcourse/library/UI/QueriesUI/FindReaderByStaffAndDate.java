@@ -10,8 +10,6 @@ import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
-import com.vaadin.flow.component.textfield.TextField;
-import com.vaadin.flow.data.value.ValueChangeMode;
 import com.vaadin.flow.router.Route;
 
 import java.time.LocalDate;
@@ -23,8 +21,6 @@ public class FindReaderByStaffAndDate extends VerticalLayout {
     private ComboBox<Staff> staffComboBox = new ComboBox<>("Select Staff:");
 
     private Integer staffId = null;
-    private LocalDate start = null;
-    private LocalDate finish = null;
 
     private ReaderService readerService;
     private Grid<Reader> grid = new Grid<>(Reader.class);
@@ -32,7 +28,6 @@ public class FindReaderByStaffAndDate extends VerticalLayout {
 
     public FindReaderByStaffAndDate(ReaderService readerService, StaffService staffService) {
         this.readerService = readerService;
-        //addClassName("reader-layout");
         setSizeFull();
         configureGrid();
         add(configureToolBar(), grid);
@@ -42,32 +37,42 @@ public class FindReaderByStaffAndDate extends VerticalLayout {
 
     private HorizontalLayout configureToolBar() {
         staffComboBox.setClearButtonVisible(true);
+        staffComboBox.setRequired(true);
         staffComboBox.addValueChangeListener(event -> {
             if (event.getValue() != null) staffId = event.getValue().getId();
             updateList();
         });
 
         startDate.addValueChangeListener(event -> {
-            start = event.getValue();
+            LocalDate selected = event.getValue();
+            if (selected != null) {
+                finishDate.setMin(selected.plusDays(1));
+            } else {
+                finishDate.setMin(null);
+            }
             updateList();
         });
         finishDate.addValueChangeListener(event -> {
-            finish = event.getValue();
+            LocalDate selected = event.getValue();
+            if (selected != null) {
+                startDate.setMax(selected.minusDays(1));
+            } else {
+                startDate.setMax(null);
+            }
             updateList();
         });
         return new HorizontalLayout(staffComboBox, startDate, finishDate);
     }
 
     private void configureGrid() {
-        //grid.setClassName("query-grid");
         grid.setSizeFull();
         grid.setColumns("firstName", "lastName");
-        //grid.setItems(readerService.findReaderByPublication(""));
     }
 
     private void updateList() {
-        if (staffId != null && start != null && finish != null) {
-            grid.setItems(readerService.findReaderByStaffAndDate(staffId, start, finish));
+        if (staffId != null) {
+            grid.setItems(readerService.findReaderByStaffAndDate(staffId, startDate.getValue(),
+                    finishDate.getValue()));
         }
     }
 }

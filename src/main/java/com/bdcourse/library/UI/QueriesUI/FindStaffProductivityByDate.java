@@ -32,19 +32,32 @@ public class FindStaffProductivityByDate extends VerticalLayout {
     }
 
     private HorizontalLayout configureToolBar() {
+        startDate.setRequired(true);
         startDate.addValueChangeListener(event -> {
-            start = event.getValue();
+            LocalDate selected = event.getValue();
+            if (selected != null) {
+                finishDate.setMin(selected.plusDays(1));
+            } else {
+                finishDate.setMin(null);
+            }
+            start = selected;
             updateList();
         });
+        finishDate.setRequired(true);
         finishDate.addValueChangeListener(event -> {
-            finish = event.getValue();
+            LocalDate selected = event.getValue();
+            if (selected != null) {
+                startDate.setMax(selected.minusDays(1));
+            } else {
+                startDate.setMax(null);
+            }
+            finish = selected;
             updateList();
         });
         return new HorizontalLayout(startDate, finishDate);
     }
 
     private void configureGrid() {
-        //grid.setClassName("query-grid");
         grid.setSizeFull();
         grid.addColumn(objects -> {
             String firstName = (String) objects[0];
@@ -55,7 +68,6 @@ public class FindStaffProductivityByDate extends VerticalLayout {
             BigInteger amount = (BigInteger) objects[2];
             return amount;
         }).setHeader("Amount of Served Readers").setSortProperty("amount");
-        //grid.setItems(readerService.findReaderByPublication(""));
     }
 
     private void updateList() {
