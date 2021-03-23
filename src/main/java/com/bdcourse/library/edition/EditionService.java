@@ -12,6 +12,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.PersistenceUnit;
 import javax.persistence.criteria.*;
+import java.math.BigInteger;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -35,6 +36,10 @@ public class EditionService {
         return editionRepository.save(edition);
     }
 
+    public boolean exist(Edition edition) {
+        return !editionRepository.existsEditionByCode(edition.getCode(), edition.getId()).equals(BigInteger.ZERO);
+    }
+
     public List<Edition> findAllFetchAll() {
         return editionRepository.findAllFetchAll();
     }
@@ -45,13 +50,8 @@ public class EditionService {
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaQuery<Edition> query = criteriaBuilder.createQuery(Edition.class);
         Root<Edition> root = query.from(Edition.class);
-        //Fetch<Distribution, Edition> editionFetch = root.fetch("edition", JoinType.INNER);
         root.fetch("publication", JoinType.INNER);
         root.fetch("position", JoinType.INNER);
-//        Join<Distribution, Edition> editionJoin = root.join("edition");
-//        Join<Distribution, Reader> readerJoin = root.join("reader");
-//        Join<Distribution, Storage> storageJoin = editionJoin.join("position").join("storage");
-
         query.select(root);
 
         List<Predicate> predicates = new ArrayList<>();
@@ -69,18 +69,6 @@ public class EditionService {
                 predicates.add(criteriaBuilder.lessThan(root.get(dateType), finish));
             }
         }
-
-//        if (inAssigned) {
-//            predicates.add(criteriaBuilder.equal(readerJoin.get("library"), storageJoin.get("library")));
-//        }
-//        else predicates.add(criteriaBuilder.notEqual(readerJoin.get("library"), storageJoin.get("library")));
-//
-//        if (start != null) {
-//            predicates.add(criteriaBuilder.greaterThan(root.get("dateGive"), start));
-//        }
-//        if (finish != null) {
-//            predicates.add(criteriaBuilder.lessThan(root.get("dateGive"), finish));
-//        }
         query.where(criteriaBuilder.and(predicates.toArray(new Predicate[predicates.size()])));
         query.orderBy(criteriaBuilder.asc(root.get("id")));
         List<Edition> resEdition = entityManager.createQuery(query).getResultList();
@@ -97,13 +85,6 @@ public class EditionService {
         return publication == null ? new ArrayList<Edition>() : editionRepository.findEditionByPublication(publication.getId());
     }
 
-//    public List<Edition> findEditionByReaderInAssignedLibrary(Integer readerId, LocalDate start, LocalDate finish) {
-//        return editionRepository.findEditionByReaderInAssignedLibrary(readerId, start, finish);
-//    }
-//
-//    public List<Edition> findEditionByReaderInNotAssignedLibrary(Integer readerId, LocalDate start, LocalDate finish) {
-//        return editionRepository.findEditionByReaderInNotAssignedLibrary(readerId, start, finish);
-//    }
     public List<Edition> findEditionByReaderInLibrary(Integer readerId, LocalDate start, LocalDate finish, Boolean inAssigned) {
         EntityManager entityManager = entityManagerFactory.createEntityManager();
         entityManager.getTransaction().begin();

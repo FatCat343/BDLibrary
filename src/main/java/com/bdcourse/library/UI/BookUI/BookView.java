@@ -1,6 +1,8 @@
 package com.bdcourse.library.UI.BookUI;
 
 import com.bdcourse.library.UI.MainView;
+import com.bdcourse.library.edition.EditionService;
+import com.bdcourse.library.publication.PublicationService;
 import com.bdcourse.library.publication.author.Author;
 import com.bdcourse.library.publication.author.AuthorService;
 import com.bdcourse.library.publication.book.Book;
@@ -39,7 +41,8 @@ public class BookView extends VerticalLayout {
     ConfigurableFilterDataProvider<Book, Void, BookFilter> customDataProvider;
     BookFilter bookFilter;
 
-    public BookView(BookService bookService, CategoryService categoryService, AuthorService authorService) {
+    public BookView(BookService bookService, CategoryService categoryService, AuthorService authorService,
+                    PublicationService publicationService) {
         this.bookService = bookService;
         bookFilter = new BookFilter();
         addClassName("book-view");
@@ -51,7 +54,7 @@ public class BookView extends VerticalLayout {
         category.setItems(categoryService.findAll());
         HorizontalLayout toolbar = configureToolBar();
         configureGrid();
-        form = new BookForm(authorService, categoryService);
+        form = new BookForm(authorService, categoryService, publicationService);
         form.addListener(BookForm.saveEvent.class, this::saveBook);
         form.addListener(BookForm.deleteEvent.class, this::deleteBook);
         form.addListener(BookForm.closeEvent.class, e -> closeEditor());
@@ -61,7 +64,7 @@ public class BookView extends VerticalLayout {
     }
 
     private HorizontalLayout configureToolBar() {
-        configureFilter(title, "Title filter");
+        configureFilter(title);
         author.setPlaceholder("Choose Authors...");
         category.setPlaceholder("Choose Categories...");
 
@@ -93,8 +96,8 @@ public class BookView extends VerticalLayout {
         editBook(new Book());
     }
 
-    private void configureFilter(TextField field, String name) {
-        field.setPlaceholder(name);
+    private void configureFilter(TextField field) {
+        field.setPlaceholder("Title filter");
         field.setClearButtonVisible(true);
         field.setValueChangeMode(ValueChangeMode.LAZY);
     }
@@ -120,6 +123,7 @@ public class BookView extends VerticalLayout {
 
 
     private void closeEditor() {
+        grid.asSingleSelect().clear();
         form.setBook(null);
         form.setVisible(false);
         removeClassName("editing");

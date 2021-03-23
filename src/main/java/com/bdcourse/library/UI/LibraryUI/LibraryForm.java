@@ -6,13 +6,13 @@ import com.vaadin.flow.component.ComponentEvent;
 import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
+import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.data.binder.ValidationException;
 import com.vaadin.flow.shared.Registration;
-
 
 public class LibraryForm extends VerticalLayout {
     private TextField address = new TextField("Library Address");
@@ -25,7 +25,8 @@ public class LibraryForm extends VerticalLayout {
     private Library library;
     Binder<Library> libraryBinder = new Binder<>(Library.class);
 
-    public LibraryForm(){
+    public LibraryForm(LibraryService libraryService){
+        this.libraryService = libraryService;
         libraryBinder.bindInstanceFields(this);
         libraryBinder.forField(address)
                 .asRequired("Required Field")
@@ -53,7 +54,13 @@ public class LibraryForm extends VerticalLayout {
     private void validateAndSave() {
         try {
             libraryBinder.writeBean(library);
-            fireEvent(new saveEvent(this, library));
+            if (!libraryService.exist(library)) {
+                fireEvent(new saveEvent(this, library));
+            }
+            else {
+                Notification.show("Save error: "+ "This item already exists").
+                        setPosition(Notification.Position.TOP_START);
+            }
         }
         catch (ValidationException err) {
             err.printStackTrace();
@@ -61,7 +68,7 @@ public class LibraryForm extends VerticalLayout {
     }
 
     public void setLibrary(Library library) {
-        this.library = library;
+        this.library = new Library(library);
         libraryBinder.readBean(library);
     }
 

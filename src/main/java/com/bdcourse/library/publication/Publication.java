@@ -49,4 +49,16 @@ public class Publication implements Serializable {
     public String toString() {
         return author + ", " + title;
     }
+
+    public Publication() {
+    }
+
+    public Publication(Publication object) {
+        if (object == null) new Publication();
+        else {
+            this.id = object.getId();
+            this.author = object.getAuthor();
+            this.title = object.getTitle();
+        }
+    }
 }

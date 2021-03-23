@@ -110,6 +110,7 @@ public class DistributionView extends VerticalLayout {
     }
 
     private void closeEditor() {
+        grid.asSingleSelect().clear();
         form.setDistribution(null);
         form.setVisible(false);
     }

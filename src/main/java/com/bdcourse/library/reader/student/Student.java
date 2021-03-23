@@ -38,9 +38,10 @@ public class Student extends Reader {
     public Student() {
     }
 
-    public Student(Integer code) {
-        super();
-        this.code = code;
+    public Student(Student object) {
+        super(object);
+        if (object == null) new Student();
+        else this.code = object.getCode();
     }
 
 }

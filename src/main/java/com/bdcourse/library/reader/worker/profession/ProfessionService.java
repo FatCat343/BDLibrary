@@ -22,4 +22,8 @@ public class ProfessionService {
     public void save(Profession profession) {
         professionRepository.save(profession);
     }
+
+    public boolean exist(Profession profession) {
+        return professionRepository.existsProfessionByName(profession.getName());
+    }
 }

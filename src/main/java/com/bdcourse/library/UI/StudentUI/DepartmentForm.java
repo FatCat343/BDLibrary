@@ -11,6 +11,7 @@ import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.formlayout.FormLayout;
+import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.IntegerField;
@@ -28,9 +29,11 @@ public class DepartmentForm extends VerticalLayout {
     Button close = new Button("close");
 
     Binder<Department> departmentBinder = new Binder<>(Department.class);
+    private DepartmentService departmentService;
     private Department department;
 
     public DepartmentForm(DepartmentService departmentService) {
+        this.departmentService = departmentService;
         addClassName("department-form");
         //studentBinder.forField(code).withConverter(new DoubleToIntegerConverter()).bind(Student::getCode, Student::setCode);
         departmentBinder.bindInstanceFields(this);
@@ -43,14 +46,13 @@ public class DepartmentForm extends VerticalLayout {
                 .withValidator(max -> max.length() <= 20, "Maximum 20 letters")
                 .bind(Department::getUniversity, Department::setUniversity);
 
-        //department.setItems(departmentService.findAll());
-        //library.setItems(libraryService.findAll());
-
         add(createFieldsLayout(), createButtonsLayout());
 
     }
 
     private HorizontalLayout createFieldsLayout() {
+        faculty.setRequired(true);
+        university.setRequired(true);
         return new HorizontalLayout(faculty, university);
     }
 
@@ -66,13 +68,19 @@ public class DepartmentForm extends VerticalLayout {
         delete.setEnabled(false);
 
         departmentBinder.addStatusChangeListener(e -> save.setEnabled(departmentBinder.isValid()));
-        return new HorizontalLayout(save, delete, close);
+        return new HorizontalLayout(save, close);
     }
 
     private void validateAndSave() {
         try {
             departmentBinder.writeBean(department);
-            fireEvent(new saveEvent(this, department));
+            if (!departmentService.exist(department)) {
+                fireEvent(new saveEvent(this, department));
+            }
+            else {
+                Notification.show("Save error: "+ "This item already exists").
+                        setPosition(Notification.Position.TOP_START);
+            }
         }
         catch (ValidationException err) {
             err.printStackTrace();

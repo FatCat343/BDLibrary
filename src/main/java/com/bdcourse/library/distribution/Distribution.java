@@ -83,6 +83,21 @@ public class Distribution implements Serializable {
         this.dateReturn = dateReturn;
     }
 
+    public Distribution() {
+    }
+
+    public Distribution(Distribution object) {
+        if (object == null) new Distribution();
+        else {
+            this.id = object.getId();
+            this.reader = object.getReader();
+            this.dateGive = object.getDateGive();
+            this.dateReturn = object.getDateReturn();
+            this.edition = object.getEdition();
+            this.staff = object.getStaff();
+        }
+    }
+
     @Override
     public String toString() {
         return "Distribution{" +

@@ -1,8 +1,6 @@
 package com.bdcourse.library.UI.WorkerUI;
 
 import com.bdcourse.library.UI.MainView;
-
-import com.bdcourse.library.UI.WorkerUI.WorkerForm;
 import com.bdcourse.library.library.Library;
 import com.bdcourse.library.library.LibraryService;
 import com.bdcourse.library.reader.worker.Worker;
@@ -12,12 +10,8 @@ import com.bdcourse.library.reader.worker.company.CompanyService;
 import com.bdcourse.library.reader.worker.profession.Profession;
 import com.bdcourse.library.reader.worker.profession.ProfessionService;
 import com.vaadin.flow.component.button.Button;
-import com.vaadin.flow.component.grid.HeaderRow;
-import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
-import com.vaadin.flow.component.textfield.IntegerField;
-import com.vaadin.flow.component.textfield.NumberField;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.provider.ConfigurableFilterDataProvider;
 import com.vaadin.flow.data.provider.DataProvider;
@@ -56,7 +50,7 @@ public class WorkerView extends VerticalLayout {
         customDataProvider.setFilter(workerFilter);
         HorizontalLayout toolbar = configureToolBar();
         configureGrid();
-        form = new WorkerForm(companyService, professionService, libraryService);
+        form = new WorkerForm(companyService, professionService, libraryService, workerService);
         form.addListener(WorkerForm.saveEvent.class, this::saveWorker);
         form.addListener(WorkerForm.deleteEvent.class, this::deleteWorker);
         form.addListener(WorkerForm.closeEvent.class, e -> closeEditor());
@@ -72,10 +66,6 @@ public class WorkerView extends VerticalLayout {
         configureFilter(profession, "Profession Filter");
         configureFilter(company, "Company Filter");
 
-//        code.setPlaceholder("Code Filter");
-//        code.setClearButtonVisible(true);
-//        code.setValueChangeMode(ValueChangeMode.LAZY);
-
         firstName.addValueChangeListener(event -> {
             if ((event.getValue() != null) && (!event.getValue().equals(""))) workerFilter.setFirstName(event.getValue());
             else workerFilter.setFirstName(null);
@@ -86,11 +76,6 @@ public class WorkerView extends VerticalLayout {
             else workerFilter.setLastName(null);
             customDataProvider.refreshAll();
         });
-//        code.addValueChangeListener(event -> {
-//            if (event.getValue() != null) studentFilter.setCode(String.valueOf(event.getValue()));
-//            else studentFilter.setCode(null);
-//            customDataProvider.refreshAll();
-//        });
         library.addValueChangeListener(event -> {
             if ((event.getValue() != null) && (!event.getValue().equals(""))) workerFilter.setLibrary(event.getValue());
             else workerFilter.setLibrary(null);
@@ -130,7 +115,6 @@ public class WorkerView extends VerticalLayout {
         grid.removeAllColumns();
         grid.addColumn(Worker::getFirstName).setHeader("FirstName").setSortProperty("firstName");
         grid.addColumn(Worker::getLastName).setHeader("LastName").setSortProperty("lastName");
-        //grid.addColumn(Student::getCode).setHeader("Code").setSortProperty("code");
         grid.addColumn(worker -> {
             Profession p = worker.getProfession();
             return p.toString();
@@ -151,6 +135,7 @@ public class WorkerView extends VerticalLayout {
 
 
     private void closeEditor() {
+        grid.asSingleSelect().clear();
         form.setWorker(null);
         form.setVisible(false);
         removeClassName("editing");

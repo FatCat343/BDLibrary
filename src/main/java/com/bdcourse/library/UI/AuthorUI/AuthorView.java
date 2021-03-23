@@ -1,6 +1,5 @@
 package com.bdcourse.library.UI.AuthorUI;
 
-
 import com.bdcourse.library.UI.MainView;
 import com.bdcourse.library.publication.author.Author;
 import com.bdcourse.library.publication.author.AuthorService;
@@ -23,7 +22,7 @@ public class AuthorView extends VerticalLayout {
         setSizeFull();
         HorizontalLayout toolbar = configureToolBar();
         configureGrid();
-        form = new AuthorForm();
+        form = new AuthorForm(authorService);
         form.addListener(AuthorForm.saveEvent.class, this::saveAuthor);
         form.addListener(AuthorForm.deleteEvent.class, this::deleteAuthor);
         form.addListener(AuthorForm.closeEvent.class, e -> closeEditor());
@@ -69,6 +68,7 @@ public class AuthorView extends VerticalLayout {
     }
 
     private void closeEditor() {
+        grid.asSingleSelect().clear();
         form.setAuthor(null);
         form.setVisible(false);
     }

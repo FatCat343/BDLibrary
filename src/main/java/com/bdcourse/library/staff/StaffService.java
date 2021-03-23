@@ -41,4 +41,9 @@ public class StaffService {
     public List<Staff> findAllByStorage(Storage storage) {
         return staffRepository.findAllByStorage(storage);
     }
+
+    public boolean exist(Staff staff){
+        return staffRepository.existsStaffByFirstNameAndLastNameAndStorage(staff.getFirstName(), staff.getLastName(),
+                staff.getStorage());
+    }
 }

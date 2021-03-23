@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.*;
 import javax.persistence.criteria.*;
 import javax.swing.text.html.parser.Entity;
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,6 +36,10 @@ public class StudentService {
     public Student save(Student student) {
         //student.setStudent_id(student.getId());
         return studentRepository.save(student);
+    }
+
+    public boolean exist(Student student) {
+        return !studentRepository.existsStudentByCode(student.getCode(), student.getId()).equals(BigInteger.ZERO);
     }
     @Transactional
     public List<Student> fetch(int page, int limit, String firstName, String lastName, String code,

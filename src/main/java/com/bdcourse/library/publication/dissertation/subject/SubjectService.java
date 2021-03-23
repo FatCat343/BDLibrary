@@ -22,4 +22,8 @@ public class SubjectService {
     public void delete(Subject subject) {
         subjectRepository.delete(subject);
     }
+
+    public boolean exist(Subject subject) {
+        return subjectRepository.existsSubjectByName(subject.getName());
+    }
 }

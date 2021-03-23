@@ -21,4 +21,8 @@ public class StorageService {
     public void delete(Storage storage) {
         storageRepository.delete(storage);
     }
+
+    public boolean exist(Storage storage) {
+        return storageRepository.existsDistinctByLibraryAndRoomNumber(storage.getLibrary(), storage.getRoomNumber());
+    }
 }

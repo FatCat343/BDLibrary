@@ -21,4 +21,8 @@ public class CompanyService {
     public void save(Company company) {
         companyRepository.save(company);
     }
+
+    public boolean exist(Company company) {
+        return companyRepository.existsCompanyByName(company.getName());
+    }
 }

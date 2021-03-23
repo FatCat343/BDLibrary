@@ -8,4 +8,5 @@ public interface CategoryRepository extends CrudRepository<Category, Integer> {
 
     List<Category> findAllByOrderByIdAsc();
 
+    boolean existsCategoryByName(String name);
 }

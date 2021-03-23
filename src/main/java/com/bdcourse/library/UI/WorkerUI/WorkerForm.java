@@ -8,6 +8,7 @@ import com.bdcourse.library.reader.student.Student;
 import com.bdcourse.library.reader.student.department.Department;
 import com.bdcourse.library.reader.student.department.DepartmentService;
 import com.bdcourse.library.reader.worker.Worker;
+import com.bdcourse.library.reader.worker.WorkerService;
 import com.bdcourse.library.reader.worker.company.Company;
 import com.bdcourse.library.reader.worker.company.CompanyService;
 import com.bdcourse.library.reader.worker.profession.Profession;
@@ -19,6 +20,7 @@ import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.formlayout.FormLayout;
+import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.IntegerField;
@@ -47,19 +49,18 @@ public class WorkerForm extends VerticalLayout {
 
     private ProfessionForm professionForm;
     private ProfessionService professionService;
+    private WorkerService workerService;
 
     Binder<Worker> workerBinder = new Binder<>(Worker.class);
     private Worker worker;
 
-    public WorkerForm(CompanyService companyService, ProfessionService professionService, LibraryService libraryService) {
+    public WorkerForm(CompanyService companyService, ProfessionService professionService, LibraryService libraryService,
+                      WorkerService workerService) {
         addClassName("worker-form");
+        this.workerService = workerService;
         this.companyService = companyService;
         this.professionService = professionService;
-        //studentBinder.forField(code).withConverter(new DoubleToIntegerConverter()).bind(Student::getCode, Student::setCode);
         workerBinder.bindInstanceFields(this);
-//        workerBinder.forField(code)
-//                .withValidator(min -> min != null && min >= 100000000 && min <= 999999999, "Require 9 characters")
-//                .bind(Student::getCode, Student::setCode);
         workerBinder.forField(firstName)
                 .withValidator(min -> min.length() >= 1, "Minimum 1 letter")
                 .withValidator(max -> max.length() <= 20, "Maximum 20 letters")
@@ -130,6 +131,11 @@ public class WorkerForm extends VerticalLayout {
         Button addCompanyButton = new Button("Add Company");
         addCompanyButton.addClickListener(click -> addCompany());
 
+        firstName.setRequired(true);
+        lastName.setRequired(true);
+        profession.setRequired(true);
+        company.setRequired(true);
+        library.setRequired(true);
         return new HorizontalLayout(firstName, lastName, profession, company, library, addProfessionButton, addCompanyButton);
     }
 
@@ -159,7 +165,13 @@ public class WorkerForm extends VerticalLayout {
     private void validateAndSave() {
         try {
             workerBinder.writeBean(worker);
-            fireEvent(new saveEvent(this, worker));
+            if (!workerService.exist(worker)){
+                fireEvent(new saveEvent(this, worker));
+            }
+            else {
+                Notification.show("Save error: "+ "This item already exists").
+                        setPosition(Notification.Position.TOP_START);
+            }
         }
         catch (ValidationException err) {
             err.printStackTrace();
@@ -167,7 +179,7 @@ public class WorkerForm extends VerticalLayout {
     }
 
     public void setWorker(Worker worker) {
-        this.worker = worker;
+        this.worker = new Worker(worker);
         workerBinder.readBean(worker);
     }
 

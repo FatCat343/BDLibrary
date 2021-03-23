@@ -19,8 +19,6 @@ public class Worker extends Reader {
     @JoinColumn(name = "profession_id")
     private Profession profession;
 
-
-
     public Company getCompany() {
         return company;
     }
@@ -37,4 +35,15 @@ public class Worker extends Reader {
         this.profession = profession;
     }
 
+    public Worker() {
+    }
+
+    public Worker(Worker object) {
+        super(object);
+        if (object == null) new Worker();
+        else {
+            this.company = object.getCompany();
+            this.profession = object.getProfession();
+        }
+    }
 }

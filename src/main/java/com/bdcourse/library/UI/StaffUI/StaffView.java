@@ -10,10 +10,8 @@ import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
-import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.renderer.NativeButtonRenderer;
 import com.vaadin.flow.data.renderer.TemplateRenderer;
-import com.vaadin.flow.data.value.ValueChangeMode;
 import com.vaadin.flow.router.Route;
 
 @Route(value = "staff", layout = MainView.class)
@@ -76,7 +74,6 @@ public class StaffView extends VerticalLayout {
 
     private void addStaff() {
         grid.asSingleSelect().clear();
-        //editStaff(new Staff());
         form.setStaffNotFetched(new Staff());
         form.setVisible(true);
     }
@@ -99,6 +96,7 @@ public class StaffView extends VerticalLayout {
     }
 
     private void closeEditor() {
+        grid.asSingleSelect().clear();
         form.setStaff(null);
         form.setVisible(false);
 
@@ -111,10 +109,4 @@ public class StaffView extends VerticalLayout {
             form.setVisible(true);
         }
     }
-
-//    private void configureFilter(TextField field, String name) {
-//        field.setPlaceholder(name);
-//        field.setClearButtonVisible(true);
-//        field.setValueChangeMode(ValueChangeMode.LAZY);
-//    }
 }

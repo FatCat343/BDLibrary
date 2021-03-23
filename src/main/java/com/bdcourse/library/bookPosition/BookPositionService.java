@@ -18,6 +18,11 @@ public class BookPositionService {
         return bookPositionRepository.save(bookPosition);
     }
 
+    public boolean exists(BookPosition bookPosition) {
+        return bookPositionRepository.existsBookPositionByStorageAndRackNumberAndShelfNumber(bookPosition.getStorage(),
+                bookPosition.getRackNumber(), bookPosition.getShelfNumber());
+    }
+
     public void delete(BookPosition bookPosition) {
         bookPositionRepository.delete(bookPosition);
     }

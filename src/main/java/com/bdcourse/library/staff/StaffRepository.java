@@ -43,4 +43,6 @@ public interface StaffRepository extends CrudRepository<Staff, Integer> {
 //    List<Staff> findStaffByStorage();
 
     List<Staff> findAllByStorage(Storage storage);
+
+    boolean existsStaffByFirstNameAndLastNameAndStorage(String firstName, String lastName, Storage storage);
 }

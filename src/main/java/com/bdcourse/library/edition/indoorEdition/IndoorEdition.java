@@ -19,4 +19,8 @@ public class IndoorEdition extends Edition {
     public void setReason(String reason) {
         this.reason = reason;
     }
+
+    public IndoorEdition() {
+    }
+
 }

@@ -1,6 +1,6 @@
 package com.bdcourse.library.UI.DissertationUI;
 
-import com.bdcourse.library.edition.EditionService;
+import com.bdcourse.library.publication.PublicationService;
 import com.bdcourse.library.publication.author.Author;
 import com.bdcourse.library.publication.author.AuthorService;
 import com.bdcourse.library.publication.dissertation.Dissertation;
@@ -11,6 +11,7 @@ import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.combobox.ComboBox;
+import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
@@ -29,18 +30,24 @@ public class DissertationForm extends VerticalLayout {
 
     private SubjectForm subjectForm;
     private SubjectService subjectService;
+    private PublicationService publicationService;
 
     Binder<Dissertation> dissertationBinder = new Binder<>(Dissertation.class);
     private Dissertation dissertation;
 
-    public DissertationForm(AuthorService authorService, SubjectService subjectService) {
+    public DissertationForm(AuthorService authorService, SubjectService subjectService,
+                            PublicationService publicationService) {
+        this.publicationService = publicationService;
         this.subjectService = subjectService;
         dissertationBinder.bindInstanceFields(this);
         dissertationBinder.forField(title)
                 .withValidator(min -> min.length() >= 1, "Minimum 1 letter")
-                .withValidator(max -> max.length() <= 20, "Maximum 20 letters")
+                .withValidator(max -> max.length() <= 100, "Maximum 100 letters")
                 .bind(Dissertation::getTitle, Dissertation::setTitle);
         author.setItems(authorService.findAll());
+        author.setRequired(true);
+        subject.setRequired(true);
+        title.setRequired(true);
         subject.setItems(subjectService.findAll());
 
         subjectForm = new SubjectForm(subjectService);
@@ -97,7 +104,13 @@ public class DissertationForm extends VerticalLayout {
     private void validateAndSave() {
         try {
             dissertationBinder.writeBean(dissertation);
-            fireEvent(new saveEvent(this, dissertation));
+            if (!publicationService.exist(dissertation)) {
+                fireEvent(new saveEvent(this, dissertation));
+            }
+            else {
+                Notification.show("Save error: "+ "This item already exists").
+                        setPosition(Notification.Position.TOP_START);
+            }
         }
         catch (ValidationException err) {
             err.printStackTrace();
@@ -105,7 +118,7 @@ public class DissertationForm extends VerticalLayout {
     }
 
     public void setDissertation(Dissertation dissertation) {
-        this.dissertation = dissertation;
+        this.dissertation = new Dissertation(dissertation);
         dissertationBinder.readBean(dissertation);
     }
 

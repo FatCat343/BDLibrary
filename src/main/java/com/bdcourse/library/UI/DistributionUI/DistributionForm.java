@@ -15,6 +15,7 @@ import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.datepicker.DatePicker;
+import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.data.binder.Binder;
@@ -42,8 +43,13 @@ public class DistributionForm extends VerticalLayout {
         this.distributionService = distributionService;
         distributionBinder.bindInstanceFields(this);
         reader.setItems(readerService.findAll());
+        reader.setRequired(true);
         edition.setItems(editionService.findAll());
+        edition.setRequired(true);
         staff.setItems(staffService.findAll());
+        staff.setRequired(true);
+        dateGive.setRequired(true);
+
         add(createFieldsLayout(), createButtonsLayout());
     }
 
@@ -67,7 +73,13 @@ public class DistributionForm extends VerticalLayout {
     private void validateAndSave() {
         try{
             distributionBinder.writeBean(distribution);
-            fireEvent(new saveEvent(this, distribution));
+            if (!distributionService.exists(distribution)) {
+                fireEvent(new saveEvent(this, distribution));
+            }
+            else {
+                Notification.show("Save error: "+ "This item already exists").
+                        setPosition(Notification.Position.TOP_START);
+            }
         }
         catch (ValidationException err) {
             err.printStackTrace();

@@ -19,7 +19,10 @@ public class LibraryService {
     }
 
     public Library save(Library library) {
-        Library result =  libraryRepository.save(library);
-        return result;
+        return libraryRepository.save(library);
+    }
+
+    public boolean exist(Library library) {
+        return libraryRepository.existsLibraryByAddress(library.getAddress());
     }
 }

@@ -2,6 +2,7 @@ package com.bdcourse.library.UI.BookPositionUI;
 
 import com.bdcourse.library.UI.StaffUI.StaffForm;
 import com.bdcourse.library.bookPosition.BookPosition;
+import com.bdcourse.library.bookPosition.BookPositionService;
 import com.bdcourse.library.staff.Staff;
 import com.bdcourse.library.storage.Storage;
 import com.bdcourse.library.storage.StorageService;
@@ -10,6 +11,7 @@ import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.combobox.ComboBox;
+import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.IntegerField;
@@ -28,15 +30,20 @@ public class BookPositionForm extends VerticalLayout {
     Button close = new Button("close");
 
     Binder<BookPosition> bookPositionBinder = new Binder<>(BookPosition.class);
+    BookPositionService bookPositionService;
     private BookPosition bookPosition;
 
-    public BookPositionForm(StorageService storageService) {
+    public BookPositionForm(BookPositionService bookPositionService, StorageService storageService) {
+        this.bookPositionService = bookPositionService;
         bookPositionBinder.bindInstanceFields(this);
         storage.setItems(storageService.findAll());
         add(createFieldsLayout(), createButtonsLayout());
     }
 
     private HorizontalLayout createFieldsLayout(){
+        shelfNumber.setRequiredIndicatorVisible(true);
+        rackNumber.setRequiredIndicatorVisible(true);
+        storage.setRequired(true);
         return new HorizontalLayout(shelfNumber, rackNumber, storage);
     }
 
@@ -56,7 +63,13 @@ public class BookPositionForm extends VerticalLayout {
     private void validateAndSave() {
         try{
             bookPositionBinder.writeBean(bookPosition);
-            fireEvent(new saveEvent(this, bookPosition));
+            if (!bookPositionService.exists(bookPosition)) {
+                fireEvent(new saveEvent(this, bookPosition));
+            }
+            else {
+                Notification.show("Save error: "+ "This item already exists").
+                        setPosition(Notification.Position.TOP_START);
+            }
         }
         catch (ValidationException err) {
             err.printStackTrace();
@@ -64,7 +77,7 @@ public class BookPositionForm extends VerticalLayout {
     }
 
     public void setBookPosition(BookPosition bookPosition) {
-        this.bookPosition = bookPosition;
+        this.bookPosition = new BookPosition(bookPosition);
         bookPositionBinder.readBean(bookPosition);
     }
 

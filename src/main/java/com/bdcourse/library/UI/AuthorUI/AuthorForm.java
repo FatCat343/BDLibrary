@@ -1,12 +1,12 @@
 package com.bdcourse.library.UI.AuthorUI;
 
-import com.bdcourse.library.UI.StaffUI.StaffForm;
 import com.bdcourse.library.publication.author.Author;
-
+import com.bdcourse.library.publication.author.AuthorService;
 import com.vaadin.flow.component.ComponentEvent;
 import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
+import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
@@ -23,9 +23,11 @@ public class AuthorForm extends VerticalLayout {
     Button close = new Button("close");
 
     Binder<Author> authorBinder = new Binder<>(Author.class);
+    private AuthorService authorService;
     private Author author;
 
-    public AuthorForm() {
+    public AuthorForm(AuthorService authorService) {
+        this.authorService = authorService;
         authorBinder.bindInstanceFields(this);
         authorBinder.forField(firstName)
                 .withValidator(min -> min.length() >= 1, "Minimum 1 letter")
@@ -39,6 +41,8 @@ public class AuthorForm extends VerticalLayout {
     }
 
     private HorizontalLayout createFieldsLayout() {
+        firstName.setRequired(true);
+        lastName.setRequired(true);
         return new HorizontalLayout(firstName, lastName);
     }
 
@@ -58,7 +62,13 @@ public class AuthorForm extends VerticalLayout {
     private void validateAndSave() {
         try{
             authorBinder.writeBean(author);
-            fireEvent(new saveEvent(this, author));
+            if (!authorService.exist(author)) {
+                fireEvent(new saveEvent(this, author));
+            }
+            else {
+                Notification.show("Save error: "+ "This item already exists").
+                        setPosition(Notification.Position.TOP_START);
+            }
         }
         catch (ValidationException err) {
             err.printStackTrace();
@@ -66,7 +76,7 @@ public class AuthorForm extends VerticalLayout {
     }
 
     public void setAuthor(Author author) {
-        this.author = author;
+        this.author = new Author(author);
         authorBinder.readBean(author);
     }
 

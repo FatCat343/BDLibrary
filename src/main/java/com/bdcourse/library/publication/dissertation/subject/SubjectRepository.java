@@ -6,4 +6,6 @@ import java.util.List;
 
 public interface SubjectRepository extends CrudRepository<Subject, Integer> {
     List<Subject> findAllByOrderByIdAsc();
+
+    boolean existsSubjectByName(String name);
 }

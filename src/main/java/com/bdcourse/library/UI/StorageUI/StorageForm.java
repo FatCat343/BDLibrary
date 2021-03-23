@@ -4,11 +4,13 @@ import com.bdcourse.library.UI.BookUI.CategoryForm;
 import com.bdcourse.library.library.Library;
 import com.bdcourse.library.library.LibraryService;
 import com.bdcourse.library.storage.Storage;
+import com.bdcourse.library.storage.StorageService;
 import com.vaadin.flow.component.ComponentEvent;
 import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.combobox.ComboBox;
+import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.IntegerField;
@@ -26,9 +28,11 @@ public class StorageForm extends VerticalLayout {
     Button close = new Button("close");
 
     Binder<Storage> storageBinder = new Binder<>(Storage.class);
+    private StorageService storageService;
     private Storage storage;
 
-    public StorageForm(LibraryService libraryService) {
+    public StorageForm(StorageService storageService, LibraryService libraryService) {
+        this.storageService = storageService;
         storageBinder.bindInstanceFields(this);
         storageBinder.forField(roomNumber)
                 .asRequired("required field")
@@ -60,7 +64,13 @@ public class StorageForm extends VerticalLayout {
     private void validateAndSave() {
         try {
             storageBinder.writeBean(storage);
-            fireEvent(new saveEvent(this, storage));
+            if (!storageService.exist(storage)) {
+                fireEvent(new saveEvent(this, storage));
+            }
+            else {
+                Notification.show("Save error: "+ "This item already exists").
+                        setPosition(Notification.Position.TOP_START);
+            }
         }
         catch (ValidationException err) {
             err.printStackTrace();
@@ -68,7 +78,7 @@ public class StorageForm extends VerticalLayout {
     }
 
     public void setStorage(Storage storage) {
-        this.storage = storage;
+        this.storage = new Storage(storage);
         storageBinder.readBean(storage);
     }
 

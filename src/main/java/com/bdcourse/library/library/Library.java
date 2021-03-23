@@ -35,4 +35,15 @@ public class Library implements Serializable {
     public String toString() {
         return address;
     }
+
+    public Library() {
+    }
+
+    public Library(Library object) {
+        if (object == null) new Library();
+        else {
+            this.id = object.getId();
+            this.address = object.getAddress();
+        }
+    }
 }

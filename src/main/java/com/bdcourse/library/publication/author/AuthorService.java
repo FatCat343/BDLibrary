@@ -21,4 +21,8 @@ public class AuthorService {
     public void delete(Author author) {
         authorRepository.delete(author);
     }
+
+    public boolean exist(Author author) {
+        return authorRepository.existsAuthorByFirstNameAndLastName(author.getFirstName(), author.getLastName());
+    }
 }

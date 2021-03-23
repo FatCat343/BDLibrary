@@ -61,4 +61,17 @@ public class Reader implements Serializable {
     public String toString() {
         return firstName + " " + lastName;
     }
+
+    public Reader() {
+    }
+
+    public Reader(Reader object) {
+        if (object == null) new Reader();
+        else {
+            this.id = object.getId();
+            this.firstName = object.getFirstName();
+            this.lastName = object.getLastName();
+            this.library = object.getLibrary();
+        }
+    }
 }

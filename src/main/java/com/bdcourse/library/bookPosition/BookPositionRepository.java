@@ -1,5 +1,6 @@
 package com.bdcourse.library.bookPosition;
 
+import com.bdcourse.library.storage.Storage;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 
@@ -9,4 +10,6 @@ public interface BookPositionRepository extends CrudRepository<BookPosition, Int
 
     @Query(value = "SELECT p FROM BookPosition p JOIN FETCH p.storage st WHERE p.id > 0")
     List<BookPosition> findAllFetch();
+
+    boolean existsBookPositionByStorageAndRackNumberAndShelfNumber(Storage storage, Integer rackNumber, Integer shelfNumber);
 }

@@ -49,4 +49,16 @@ public class Storage implements Serializable {
     public String toString() {
         return roomNumber +" room in " + library.getAddress();
     }
+
+    public Storage() {
+    }
+
+    public Storage(Storage object) {
+        if (object == null) new Storage();
+        else {
+            this.id = object.getId();
+            this.library = object.getLibrary();
+            this.roomNumber = object.getRoomNumber();
+        }
+    }
 }

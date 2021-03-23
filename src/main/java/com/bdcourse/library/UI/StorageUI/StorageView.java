@@ -1,9 +1,7 @@
 package com.bdcourse.library.UI.StorageUI;
 
 import com.bdcourse.library.UI.MainView;
-import com.bdcourse.library.UI.StaffUI.StaffForm;
 import com.bdcourse.library.library.LibraryService;
-import com.bdcourse.library.staff.Staff;
 import com.bdcourse.library.storage.Storage;
 import com.bdcourse.library.storage.StorageService;
 import com.vaadin.flow.component.button.Button;
@@ -24,7 +22,7 @@ public class StorageView extends VerticalLayout {
         setSizeFull();
         HorizontalLayout toolbar = configureToolBar();
         configureGrid();
-        form = new StorageForm(libraryService);
+        form = new StorageForm(storageService, libraryService);
         form.addListener(StorageForm.saveEvent.class, this::saveStorage);
         form.addListener(StorageForm.deleteEvent.class, this::deleteStorage);
         form.addListener(StorageForm.closeEvent.class, e -> closeEditor());
@@ -72,6 +70,7 @@ public class StorageView extends VerticalLayout {
     }
 
     private void closeEditor(){
+        grid.asSingleSelect().clear();
         form.setStorage(null);
         form.setVisible(false);
     }

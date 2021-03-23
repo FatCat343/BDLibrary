@@ -7,6 +7,7 @@ import com.vaadin.flow.component.ComponentEvent;
 import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
+import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
@@ -22,19 +23,19 @@ public class CategoryForm extends VerticalLayout {
     Button close = new Button("close");
 
     Binder<Category> categoryBinder = new Binder<>(Category.class);
+    private CategoryService categoryService;
     private Category category;
 
     public CategoryForm(CategoryService categoryService) {
+        this.categoryService = categoryService;
         addClassName("category-form");
-        //studentBinder.forField(code).withConverter(new DoubleToIntegerConverter()).bind(Student::getCode, Student::setCode);
         categoryBinder.bindInstanceFields(this);
         categoryBinder.forField(name)
                 .withValidator(min -> min.length() >= 1, "Minimum 1 letter")
                 .withValidator(max -> max.length() <= 20, "Maximum 20 letters")
                 .bind(Category::getName, Category::setName);
-
         add(createFieldsLayout(), createButtonsLayout());
-
+        name.setRequired(true);
     }
 
     private HorizontalLayout createFieldsLayout() {
@@ -59,7 +60,13 @@ public class CategoryForm extends VerticalLayout {
     private void validateAndSave() {
         try {
             categoryBinder.writeBean(category);
-            fireEvent(new saveEvent(this, category));
+            if (!categoryService.exist(category)) {
+                fireEvent(new saveEvent(this, category));
+            }
+            else {
+                Notification.show("Save error: "+ "This item already exists").
+                        setPosition(Notification.Position.TOP_START);
+            }
         }
         catch (ValidationException err) {
             err.printStackTrace();

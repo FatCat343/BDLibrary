@@ -3,6 +3,7 @@ package com.bdcourse.library.UI.StudentUI;
 import com.bdcourse.library.library.Library;
 import com.bdcourse.library.library.LibraryService;
 import com.bdcourse.library.reader.student.Student;
+import com.bdcourse.library.reader.student.StudentService;
 import com.bdcourse.library.reader.student.department.Department;
 import com.bdcourse.library.reader.student.department.DepartmentService;
 import com.vaadin.flow.component.Component;
@@ -12,6 +13,7 @@ import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.formlayout.FormLayout;
+import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.IntegerField;
@@ -36,14 +38,15 @@ public class StudentForm extends VerticalLayout {
 
     private DepartmentForm departmentForm;
     private DepartmentService departmentService;
+    private StudentService studentService;
 
     Binder<Student> studentBinder = new Binder<>(Student.class);
     private Student student;
 
-    public StudentForm(DepartmentService departmentService, LibraryService libraryService) {
+    public StudentForm(DepartmentService departmentService, LibraryService libraryService, StudentService studentService) {
         addClassName("student-form");
         this.departmentService = departmentService;
-        //studentBinder.forField(code).withConverter(new DoubleToIntegerConverter()).bind(Student::getCode, Student::setCode);
+        this.studentService = studentService;
         studentBinder.bindInstanceFields(this);
         studentBinder.forField(code)
                 .withValidator(min -> min != null && min >= 100000000 && min <= 999999999, "Require 9 characters")
@@ -56,7 +59,6 @@ public class StudentForm extends VerticalLayout {
                 .withValidator(min -> min.length() >= 1, "Minimum 1 letter")
                 .withValidator(max -> max.length() <= 20, "Maximum 20 letters")
                 .bind(Student::getLastName, Student::setLastName);
-
         department.setItems(departmentService.findAll());
         library.setItems(libraryService.findAll());
 
@@ -90,6 +92,10 @@ public class StudentForm extends VerticalLayout {
     private HorizontalLayout createFieldsLayout() {
         Button addDepartmentButton = new Button("Add Department");
         addDepartmentButton.addClickListener(click -> addDepartment());
+        department.setRequired(true);
+        library.setRequired(true);
+        lastName.setRequired(true);
+        firstName.setRequired(true);
         return new HorizontalLayout(firstName, lastName, code, department, library, addDepartmentButton);
     }
 
@@ -114,7 +120,13 @@ public class StudentForm extends VerticalLayout {
     private void validateAndSave() {
         try {
             studentBinder.writeBean(student);
-            fireEvent(new saveEvent(this, student));
+            if (!studentService.exist(student)) {
+                fireEvent(new saveEvent(this, student));
+            }
+            else {
+                Notification.show("Save error: "+ "This item already exists").
+                        setPosition(Notification.Position.TOP_START);
+            }
         }
         catch (ValidationException err) {
             err.printStackTrace();
@@ -122,7 +134,7 @@ public class StudentForm extends VerticalLayout {
     }
 
     public void setStudent(Student student) {
-        this.student = student;
+        this.student = new Student(student);
         studentBinder.readBean(student);
     }
 

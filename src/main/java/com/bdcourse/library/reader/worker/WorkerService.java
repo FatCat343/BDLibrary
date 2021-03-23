@@ -14,6 +14,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.PersistenceUnit;
 import javax.persistence.criteria.*;
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,6 +36,11 @@ public class WorkerService {
 
     public void delete(Worker worker) {
          workerRepository.delete(worker);
+    }
+
+    public boolean exist(Worker worker) {
+        return !workerRepository.existsWorkerByCompanyAndProfessionAndFirstNameAndFirstNameAndLibrary(worker.getCompany(),
+                worker.getProfession(), worker.getFirstName(), worker.getLastName(), worker.getId()).equals(BigInteger.ZERO);
     }
 
     public WorkerSort createSort(String propertyName, boolean descending) {

@@ -1,7 +1,5 @@
 package com.bdcourse.library.UI.StaffUI;
 
-import com.bdcourse.library.UI.StudentUI.StudentForm;
-import com.bdcourse.library.library.Library;
 import com.bdcourse.library.staff.Staff;
 import com.bdcourse.library.staff.StaffService;
 import com.bdcourse.library.storage.Storage;
@@ -11,6 +9,7 @@ import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.combobox.ComboBox;
+import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
@@ -34,7 +33,6 @@ public class StaffForm extends VerticalLayout {
     private Staff staff;
 
     public StaffForm(StorageService storageService, StaffService staffService) {
-        //this.storage
         this.staffService = staffService;
         staffBinder.bindInstanceFields(this);
         staffBinder.forField(firstName)
@@ -47,10 +45,11 @@ public class StaffForm extends VerticalLayout {
                 .bind(Staff::getLastName, Staff::setLastName);
         storage.setItems(storageService.findAll());
         add(createFieldsLayout(), createButtonsLayout());
-
-
     }
     private HorizontalLayout createFieldsLayout(){
+        storage.setRequired(true);
+        lastName.setRequired(true);
+        firstName.setRequired(true);
         return new HorizontalLayout(firstName, lastName, storage);
     }
     private HorizontalLayout createButtonsLayout(){
@@ -69,7 +68,13 @@ public class StaffForm extends VerticalLayout {
     private void validateAndSave() {
         try{
             staffBinder.writeBean(staff);
-            fireEvent(new saveEvent(this, staff));
+            if (!staffService.exist(staff)){
+                fireEvent(new saveEvent(this, staff));
+            }
+            else {
+                Notification.show("Save error: "+ "This item already exists").
+                        setPosition(Notification.Position.TOP_START);
+            }
         }
         catch (ValidationException err) {
             err.printStackTrace();
@@ -84,7 +89,7 @@ public class StaffForm extends VerticalLayout {
 
     public void setStaffNotFetched(Staff staff) {
         //Staff fetchedStaff = staffService.findStaffByIdFetch(staff);
-        this.staff = staff;
+        this.staff = new Staff(staff);
         staffBinder.readBean(staff);
     }
 

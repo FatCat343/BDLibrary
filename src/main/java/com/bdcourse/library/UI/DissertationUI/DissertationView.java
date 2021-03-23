@@ -1,6 +1,7 @@
 package com.bdcourse.library.UI.DissertationUI;
 
 import com.bdcourse.library.UI.MainView;
+import com.bdcourse.library.publication.PublicationService;
 import com.bdcourse.library.publication.author.Author;
 import com.bdcourse.library.publication.author.AuthorService;
 import com.bdcourse.library.publication.dissertation.Dissertation;
@@ -39,7 +40,7 @@ public class DissertationView extends VerticalLayout {
     DissertationFilter dissertationFilter;
 
     public DissertationView(DissertationService dissertationService, SubjectService subjectService,
-                            AuthorService authorService) {
+                            AuthorService authorService, PublicationService publicationService) {
         this.dissertationService = dissertationService;
         dissertationFilter = new DissertationFilter();
         addClassName("dissertation-view");
@@ -51,7 +52,7 @@ public class DissertationView extends VerticalLayout {
         subject.setItems(subjectService.findAll());
         HorizontalLayout toolbar = configureToolBar();
         configureGrid();
-        form = new DissertationForm(authorService, subjectService);
+        form = new DissertationForm(authorService, subjectService, publicationService);
         form.addListener(DissertationForm.saveEvent.class, this::saveDissertation);
         form.addListener(DissertationForm.deleteEvent.class, this::deleteDissertation);
         form.addListener(DissertationForm.closeEvent.class, e -> closeEditor());
@@ -121,6 +122,7 @@ public class DissertationView extends VerticalLayout {
 
 
     private void closeEditor() {
+        grid.asSingleSelect().clear();
         form.setDissertation(null);
         form.setVisible(false);
         removeClassName("editing");

@@ -13,6 +13,17 @@ public class Book extends Publication {
     @JoinColumn(name = "category_id")
     private Category category;
 
+    public Book(Book object) {
+        super(object);
+        if (object == null) new Book();
+        else {
+            this.category = object.getCategory();
+        }
+    }
+
+    public Book() {
+    }
+
     public Category getCategory() {
         return category;
     }

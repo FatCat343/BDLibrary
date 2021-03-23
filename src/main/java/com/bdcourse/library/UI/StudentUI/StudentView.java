@@ -8,12 +8,9 @@ import com.bdcourse.library.reader.student.StudentService;
 import com.bdcourse.library.reader.student.department.Department;
 import com.bdcourse.library.reader.student.department.DepartmentService;
 import com.vaadin.flow.component.button.Button;
-import com.vaadin.flow.component.grid.HeaderRow;
-import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.IntegerField;
-import com.vaadin.flow.component.textfield.NumberField;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.provider.ConfigurableFilterDataProvider;
 import com.vaadin.flow.data.provider.DataProvider;
@@ -52,7 +49,7 @@ public class StudentView extends VerticalLayout {
         customDataProvider.setFilter(studentFilter);
         HorizontalLayout toolbar = configureToolBar();
         configureGrid();
-        form = new StudentForm(departmentService, libraryService);
+        form = new StudentForm(departmentService, libraryService, studentService);
         form.addListener(StudentForm.saveEvent.class, this::saveStudent);
         form.addListener(StudentForm.deleteEvent.class, this::deleteStudent);
         form.addListener(StudentForm.closeEvent.class, e -> closeEditor());
@@ -136,8 +133,8 @@ public class StudentView extends VerticalLayout {
         grid.asSingleSelect().addValueChangeListener(event -> editStudent(event.getValue()));
     }
 
-
     private void closeEditor() {
+        grid.asSingleSelect().clear();
         form.setStudent(null);
         form.setVisible(false);
         removeClassName("editing");

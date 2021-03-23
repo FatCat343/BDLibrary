@@ -21,7 +21,7 @@ public class LibraryView extends VerticalLayout {
         setSizeFull();
         HorizontalLayout toolbar = configureToolBar();
         configureGrid();
-        form = new LibraryForm();
+        form = new LibraryForm(libraryService);
         form.addListener(LibraryForm.saveEvent.class, this::saveLibrary);
         form.addListener(LibraryForm.deleteEvent.class, this::deleteLibrary);
         form.addListener(LibraryForm.closeEvent.class, e -> closeEditor());
@@ -68,6 +68,7 @@ public class LibraryView extends VerticalLayout {
     }
 
     private void closeEditor(){
+        grid.asSingleSelect().clear();
         form.setLibrary(null);
         form.setVisible(false);
     }

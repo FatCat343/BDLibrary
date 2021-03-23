@@ -1,6 +1,7 @@
 package com.bdcourse.library.edition;
 
 import com.bdcourse.library.bookPosition.BookPosition;
+import com.bdcourse.library.edition.indoorEdition.IndoorEdition;
 import com.bdcourse.library.publication.Publication;
 
 import javax.persistence.*;
@@ -34,6 +35,9 @@ public class Edition implements Serializable {
 
     @Column(name = "date_left")
     private LocalDate dateLeft;
+
+    public Edition() {
+    }
 
     public Integer getId() {
         return id;

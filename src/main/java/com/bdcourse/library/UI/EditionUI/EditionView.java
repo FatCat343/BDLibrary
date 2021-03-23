@@ -47,12 +47,12 @@ public class EditionView extends VerticalLayout {
         setSizeFull();
         HorizontalLayout toolbar = configureToolBar();
         configureGrid();
-        indoorEditionForm = new IndoorEditionForm(publicationService, bookPositionService);
+        indoorEditionForm = new IndoorEditionForm(publicationService, bookPositionService, editionService);
         indoorEditionForm.addListener(IndoorEditionForm.saveEvent.class, this::saveIndoorEdition);
         indoorEditionForm.addListener(IndoorEditionForm.deleteEvent.class, this::deleteIndoorEdition);
         indoorEditionForm.addListener(IndoorEditionForm.closeEvent.class, e -> closeIndoorEditionEditor());
 
-        outdoorEditionForm = new OutdoorEditionForm(publicationService, bookPositionService);
+        outdoorEditionForm = new OutdoorEditionForm(publicationService, bookPositionService, editionService);
         outdoorEditionForm.addListener(OutdoorEditionForm.saveEvent.class, this::saveOutdoorEdition);
         outdoorEditionForm.addListener(OutdoorEditionForm.deleteEvent.class, this::deleteOutdoorEdition);
         outdoorEditionForm.addListener(OutdoorEditionForm.closeEvent.class, e -> closeOutdoorEditionEditor());
@@ -69,7 +69,6 @@ public class EditionView extends VerticalLayout {
         grid.removeAllColumns();;
         grid.addColumn(Edition::getCode).setHeader("Edition Code").setSortProperty("code");
         grid.addColumn(Edition::getPublication).setHeader("Publication").setSortProperty("publication");
-        //grid.addColumn(Edition::getPosition).setHeader("Edition Placement").setSortProperty("position");
         grid.addColumn(Edition::getDateArrived).setHeader("Edition Date of Arrival").setSortProperty("dateArrived");
         grid.addColumn(Edition::getDateLeft).setHeader("Edition Date of Leaving").setSortProperty("dateLeft");
         grid.setItemDetailsRenderer(TemplateRenderer.<Edition>of(
@@ -194,11 +193,13 @@ public class EditionView extends VerticalLayout {
     }
 
     private void closeIndoorEditionEditor(){
+        grid.asSingleSelect().clear();
         indoorEditionForm.setIndoorEdition(null);
         indoorEditionForm.setVisible(false);
     }
 
     private void closeOutdoorEditionEditor(){
+        grid.asSingleSelect().clear();
         outdoorEditionForm.setOutdoorEdition(null);
         outdoorEditionForm.setVisible(false);
     }

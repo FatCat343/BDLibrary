@@ -1,9 +1,12 @@
 package com.bdcourse.library.publication;
 
+import com.bdcourse.library.publication.author.Author;
 import jdk.jshell.EvalException;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.query.Param;
 
+import java.math.BigInteger;
 import java.util.List;
 
 public interface PublicationRepository extends CrudRepository<Publication, Integer> {
@@ -26,4 +29,7 @@ public interface PublicationRepository extends CrudRepository<Publication, Integ
             "ORDER BY \n" +
             "    COUNT(*) DESC", nativeQuery = true)
     List<Object[]> findPublicationsByPopularity();
+
+    @Query(value = "SELECT COUNT(p) FROM Publication p WHERE p.author = :author AND p.title = :title AND p.id <> :id")
+    BigInteger existsPublicationByAuthorAndTitle(@Param("author") Author author, @Param("title") String title, @Param("id") Integer id);
 }

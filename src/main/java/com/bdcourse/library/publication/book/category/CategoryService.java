@@ -23,4 +23,8 @@ public class CategoryService {
     public void delete(Category category) {
         categoryRepository.delete(category);
     }
+
+    public boolean exist(Category category) {
+        return categoryRepository.existsCategoryByName(category.getName());
+    }
 }

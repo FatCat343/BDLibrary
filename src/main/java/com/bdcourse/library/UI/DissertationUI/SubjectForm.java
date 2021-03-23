@@ -6,6 +6,7 @@ import com.vaadin.flow.component.ComponentEvent;
 import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
+import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
@@ -21,16 +22,18 @@ public class SubjectForm extends VerticalLayout {
     Button close = new Button("close");
 
     Binder<Subject> subjectBinder = new Binder<>(Subject.class);
+    private SubjectService subjectService;
     private Subject subject;
 
     public SubjectForm(SubjectService subjectService) {
+        this.subjectService = subjectService;
         addClassName("subject-form");
         subjectBinder.bindInstanceFields(this);
         subjectBinder.forField(name)
                 .withValidator(min -> min.length() >= 1, "Minimum 1 letter")
                 .withValidator(max -> max.length() <= 20, "Maximum 20 letters")
                 .bind(Subject::getName, Subject::setName);
-
+        name.setRequired(true);
         add(createFieldsLayout(), createButtonsLayout());
     }
 
@@ -56,7 +59,13 @@ public class SubjectForm extends VerticalLayout {
     private void validateAndSave() {
         try {
             subjectBinder.writeBean(subject);
-            fireEvent(new saveEvent(this, subject));
+            if (!subjectService.exist(subject)) {
+                fireEvent(new saveEvent(this, subject));
+            }
+            else {
+                Notification.show("Save error: "+ "This item already exists").
+                        setPosition(Notification.Position.TOP_START);
+            }
         }
         catch (ValidationException err) {
             err.printStackTrace();

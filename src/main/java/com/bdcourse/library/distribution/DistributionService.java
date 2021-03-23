@@ -11,6 +11,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.PersistenceUnit;
 import javax.persistence.criteria.*;
+import java.math.BigInteger;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -32,6 +33,12 @@ public class DistributionService {
 
     public void delete(Distribution distribution) {
         distributionRepository.delete(distribution);
+    }
+
+    public boolean exists(Distribution distribution) {
+        return !distributionRepository.existsDistributionByStaffAndReaderAndEditionAndDateGive(
+                distribution.getStaff(), distribution.getReader(), distribution.getEdition(), distribution.getDateGive(),
+                distribution.getId()).equals(BigInteger.ZERO);
     }
 
     public Distribution findDistributionFetch(Distribution distribution) {
@@ -66,7 +73,6 @@ public class DistributionService {
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaQuery<Distribution> query = criteriaBuilder.createQuery(Distribution.class);
         Root<Distribution> root = query.from(Distribution.class);
-        //Fetch<Distribution, Edition> editionFetch = root.fetch("edition", JoinType.INNER);
         root.fetch("reader", JoinType.INNER);
         root.fetch("edition", JoinType.INNER);
         Join<Distribution, Edition> editionJoin = root.join("edition");

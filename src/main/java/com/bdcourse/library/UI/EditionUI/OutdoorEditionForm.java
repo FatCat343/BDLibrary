@@ -2,6 +2,7 @@ package com.bdcourse.library.UI.EditionUI;
 
 import com.bdcourse.library.bookPosition.BookPosition;
 import com.bdcourse.library.bookPosition.BookPositionService;
+import com.bdcourse.library.edition.EditionService;
 import com.bdcourse.library.edition.indoorEdition.IndoorEdition;
 import com.bdcourse.library.edition.outdoorEdition.OutdoorEdition;
 import com.bdcourse.library.edition.outdoorEdition.OutdoorEditionService;
@@ -13,6 +14,7 @@ import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.datepicker.DatePicker;
+import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.IntegerField;
@@ -32,11 +34,13 @@ public class OutdoorEditionForm extends VerticalLayout {
     Button delete = new Button("delete");
     Button close = new Button("close");
 
-    private OutdoorEditionService outdoorEditionService;
+    private EditionService editionService;
     private OutdoorEdition outdoorEdition;
     Binder<OutdoorEdition> outdoorEditionBinder = new Binder<>(OutdoorEdition.class);
 
-    public OutdoorEditionForm(PublicationService publicationService, BookPositionService bookPositionService){
+    public OutdoorEditionForm(PublicationService publicationService, BookPositionService bookPositionService,
+                              EditionService editionService){
+        this.editionService = editionService;
         outdoorEditionBinder.bindInstanceFields(this);
         outdoorEditionBinder.forField(rentalPeriod)
                 .asRequired("Required Field")
@@ -79,7 +83,13 @@ public class OutdoorEditionForm extends VerticalLayout {
     private void validateAndSave() {
         try {
             outdoorEditionBinder.writeBean(outdoorEdition);
-            fireEvent(new saveEvent(this, outdoorEdition));
+            if (!editionService.exist(outdoorEdition)) {
+                fireEvent(new saveEvent(this, outdoorEdition));
+            }
+            else {
+                Notification.show("Save error: "+ "This item already exists").
+                        setPosition(Notification.Position.TOP_START);
+            }
         }
         catch (ValidationException err) {
             err.printStackTrace();

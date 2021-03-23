@@ -60,6 +60,19 @@ public class Staff implements Serializable {
         this.storage = storage;
     }
 
+    public Staff() {
+    }
+
+    public Staff(Staff object) {
+        if (object == null) new Staff();
+        else {
+            this.id = object.getId();
+            this.firstName = object.getFirstName();
+            this.lastName = object.getLastName();
+            this.storage = object.getStorage();
+        }
+    }
+
     @Override
     public String toString() {
         return firstName + " " + lastName;

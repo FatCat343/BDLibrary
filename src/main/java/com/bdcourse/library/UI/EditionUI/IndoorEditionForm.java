@@ -2,6 +2,7 @@ package com.bdcourse.library.UI.EditionUI;
 
 import com.bdcourse.library.bookPosition.BookPosition;
 import com.bdcourse.library.bookPosition.BookPositionService;
+import com.bdcourse.library.edition.EditionService;
 import com.bdcourse.library.edition.indoorEdition.IndoorEdition;
 import com.bdcourse.library.edition.indoorEdition.IndoorEditionService;
 import com.bdcourse.library.publication.Publication;
@@ -12,6 +13,7 @@ import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.datepicker.DatePicker;
+import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.IntegerField;
@@ -32,11 +34,13 @@ public class IndoorEditionForm extends VerticalLayout {
     Button delete = new Button("delete");
     Button close = new Button("close");
 
-    private IndoorEditionService indoorEditionService;
+    private EditionService editionService;
     private IndoorEdition indoorEdition;
     Binder<IndoorEdition> indoorEditionBinder = new Binder<>(IndoorEdition.class);
 
-    public IndoorEditionForm(PublicationService publicationService, BookPositionService bookPositionService){
+    public IndoorEditionForm(PublicationService publicationService, BookPositionService bookPositionService,
+                             EditionService editionService){
+        this.editionService = editionService;
         indoorEditionBinder.bindInstanceFields(this);
         indoorEditionBinder.forField(reason)
                 .asRequired("Required Field")
@@ -78,7 +82,13 @@ public class IndoorEditionForm extends VerticalLayout {
     private void validateAndSave() {
         try {
             indoorEditionBinder.writeBean(indoorEdition);
-            fireEvent(new saveEvent(this, indoorEdition));
+            if (!editionService.exist(indoorEdition)) {
+                fireEvent(new saveEvent(this, indoorEdition));
+            }
+            else{
+                Notification.show("Save error: "+ "This item already exists").
+                        setPosition(Notification.Position.TOP_START);
+            }
         }
         catch (ValidationException err) {
             err.printStackTrace();

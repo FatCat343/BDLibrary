@@ -5,6 +5,7 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 
 
+import java.math.BigInteger;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -18,6 +19,9 @@ public interface EditionRepository extends CrudRepository<Edition, Integer> {
     @Query(value = "SELECT e FROM Edition e JOIN FETCH e.publication publ JOIN FETCH e.position pos " +
             "JOIN FETCH pos.storage stor WHERE e.id > 0 ORDER BY e.id ASC")
     List<Edition> findAllFetchAll();
+
+    @Query(value = "SELECT COUNT(e) FROM Edition e WHERE e.id <> :id AND e.code = :code")
+    BigInteger existsEditionByCode(@Param("code") Integer code, @Param("id") Integer id);
 
     //11 Query
     //    @Query(value = "SELECT e \n" +

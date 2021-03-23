@@ -1,5 +1,6 @@
 package com.bdcourse.library.UI.BookUI;
 
+import com.bdcourse.library.publication.PublicationService;
 import com.bdcourse.library.publication.author.Author;
 import com.bdcourse.library.publication.author.AuthorService;
 import com.bdcourse.library.publication.book.Book;
@@ -10,6 +11,7 @@ import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.combobox.ComboBox;
+import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
@@ -28,19 +30,25 @@ public class BookForm extends VerticalLayout {
 
     private CategoryForm categoryForm;
     private CategoryService categoryService;
+    private PublicationService publicationService;
 
     Binder<Book> bookBinder = new Binder<>(Book.class);
     private Book book;
 
-    public BookForm(AuthorService authorService, CategoryService categoryService) {
+    public BookForm(AuthorService authorService, CategoryService categoryService, PublicationService publicationService) {
+        this.publicationService = publicationService;
         this.categoryService = categoryService;
         bookBinder.bindInstanceFields(this);
         bookBinder.forField(title)
                 .withValidator(min -> min.length() >= 1, "Minimum 1 letter")
-                .withValidator(max -> max.length() <= 20, "Maximum 20 letters")
+                .withValidator(max -> max.length() <= 100, "Maximum 100 letters")
                 .bind(Book::getTitle, Book::setTitle);
         author.setItems(authorService.findAll());
         category.setItems(categoryService.findAll());
+
+        title.setRequired(true);
+        author.setRequired(true);
+        category.setRequired(true);
 
         categoryForm = new CategoryForm(categoryService);
         categoryForm.addListener(CategoryForm.saveEvent.class,  this::saveCategory);
@@ -96,7 +104,13 @@ public class BookForm extends VerticalLayout {
     private void validateAndSave() {
         try {
             bookBinder.writeBean(book);
-            fireEvent(new saveEvent(this, book));
+            if (!publicationService.exist(book)) {
+                fireEvent(new saveEvent(this, book));
+            }
+            else {
+                Notification.show("Save error: "+ "This item already exists").
+                        setPosition(Notification.Position.TOP_START);
+            }
         }
         catch (ValidationException err) {
             err.printStackTrace();
@@ -104,7 +118,7 @@ public class BookForm extends VerticalLayout {
     }
 
     public void setBook(Book book) {
-        this.book = book;
+        this.book = new Book(book);
         bookBinder.readBean(book);
     }
 

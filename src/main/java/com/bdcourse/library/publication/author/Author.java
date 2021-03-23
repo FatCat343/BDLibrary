@@ -42,6 +42,18 @@ public class Author implements Serializable {
         this.lastName = lastName;
     }
 
+    public Author() {
+    }
+
+    public Author(Author object) {
+        if (object == null) new Author();
+        else {
+            this.id = object.getId();
+            this.firstName = object.getFirstName();
+            this.lastName = object.getLastName();
+        }
+    }
+
     @Override
     public String toString() {
         return firstName + " " + lastName;

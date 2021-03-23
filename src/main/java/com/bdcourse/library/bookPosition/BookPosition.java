@@ -24,6 +24,19 @@ public class BookPosition implements Serializable {
     @Column(name = "shelf_number")
     private Integer shelfNumber;
 
+    public BookPosition(BookPosition object) {
+        if (object == null) new BookPosition();
+        else {
+            this.id = object.getId();
+            this.rackNumber = object.getRackNumber();
+            this.shelfNumber = object.getShelfNumber();
+            this.storage = object.getStorage();
+        }
+    }
+
+    public BookPosition() {
+    }
+
     public Integer getId() {
         return id;
     }
@@ -56,8 +69,11 @@ public class BookPosition implements Serializable {
         this.shelfNumber = shelfNumber;
     }
 
+
+
     @Override
     public String toString() {
         return "shelf: " + shelfNumber + ", rack: " + rackNumber + ", " + storage.toString();
     }
+
 }

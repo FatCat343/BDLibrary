@@ -21,4 +21,15 @@ public class Dissertation extends Publication {
     public void setSubject(Subject subject) {
         this.subject = subject;
     }
+
+    public Dissertation() {
+    }
+
+    public Dissertation(Dissertation object) {
+        super(object);
+        if (object == null) new Dissertation();
+        else {
+            this.subject = object.getSubject();
+        }
+    }
 }

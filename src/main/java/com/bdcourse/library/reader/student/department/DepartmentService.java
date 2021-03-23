@@ -21,4 +21,8 @@ public class DepartmentService {
     public void delete(Department department) {
         departmentRepository.delete(department);
     }
+
+    public boolean exist(Department department) {
+        return departmentRepository.existsDepartmentByFacultyAndUniversity(department.getFaculty(), department.getUniversity());
+    }
 }
