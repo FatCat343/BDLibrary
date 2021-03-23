@@ -37,8 +37,6 @@ public class EditionView extends VerticalLayout {
     private DatePicker startDate = new DatePicker("From:");
     private DatePicker finishDate = new DatePicker("To:");
     private Boolean isArrived = null;
-    private LocalDate start = null;
-    private LocalDate finish = null;
 
     public EditionView(IndoorEditionService indoorEditionService, OutdoorEditionService outdoorEditionService,
                        PublicationService publicationService, BookPositionService bookPositionService,
@@ -121,20 +119,34 @@ public class EditionView extends VerticalLayout {
         filterVariants.setItems("Arrival Date", "Leaving Date");
         filterVariants.setClearButtonVisible(true);
         filterVariants.addValueChangeListener(event -> {
-            if (event.getValue().equals("Arrival Date")) isArrived = true;
+            if (event.getValue() == null) isArrived = null;
             else {
-                if (event.getValue().equals("Arrival Date")) isArrived = false;
-                else isArrived = null;
+                if (event.getValue().equals("Arrival Date")) isArrived = true;
+                else {
+                    if (event.getValue().equals("Arrival Date")) isArrived = false;
+                }
             }
             updateList();
         });
 
         startDate.addValueChangeListener(event -> {
-            start = event.getValue();
+            LocalDate selected = event.getValue();
+            LocalDate finish = finishDate.getValue();
+            if (selected != null) {
+                finishDate.setMin(selected.plusDays(1));
+            } else {
+                finishDate.setMin(null);
+            }
             updateList();
         });
         finishDate.addValueChangeListener(event -> {
-            finish = event.getValue();
+            LocalDate selected = event.getValue();
+            LocalDate start = startDate.getValue();
+            if (selected != null) {
+                startDate.setMax(selected.minusDays(1));
+            } else {
+                startDate.setMax(null);
+            }
             updateList();
         });
 
@@ -154,12 +166,7 @@ public class EditionView extends VerticalLayout {
     }
 
     private void updateList() {
-        if (isArrived == null) {
-            grid.setItems(editionService.findAllFetchAll());
-        }
-        else {
-
-        }
+        grid.setItems(editionService.findAllByDateFetchAll(isArrived, startDate.getValue(), finishDate.getValue()));
     }
 
     private void saveIndoorEdition(IndoorEditionForm.saveEvent event) {

@@ -39,6 +39,56 @@ public class EditionService {
         return editionRepository.findAllFetchAll();
     }
 
+    public List<Edition> findAllByDateFetchAll(Boolean isArrived, LocalDate start, LocalDate finish) {
+        EntityManager entityManager = entityManagerFactory.createEntityManager();
+        entityManager.getTransaction().begin();
+        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Edition> query = criteriaBuilder.createQuery(Edition.class);
+        Root<Edition> root = query.from(Edition.class);
+        //Fetch<Distribution, Edition> editionFetch = root.fetch("edition", JoinType.INNER);
+        root.fetch("publication", JoinType.INNER);
+        root.fetch("position", JoinType.INNER);
+//        Join<Distribution, Edition> editionJoin = root.join("edition");
+//        Join<Distribution, Reader> readerJoin = root.join("reader");
+//        Join<Distribution, Storage> storageJoin = editionJoin.join("position").join("storage");
+
+        query.select(root);
+
+        List<Predicate> predicates = new ArrayList<>();
+        predicates.add(criteriaBuilder.notEqual(root.get("id"), 0));
+
+        if (isArrived != null) {
+            String dateType;
+            if (isArrived) dateType = "dateArrived";
+            else dateType = "dateLeft";
+
+            if (start != null) {
+                predicates.add(criteriaBuilder.greaterThan(root.get(dateType), start));
+            }
+            if (finish != null) {
+                predicates.add(criteriaBuilder.lessThan(root.get(dateType), finish));
+            }
+        }
+
+//        if (inAssigned) {
+//            predicates.add(criteriaBuilder.equal(readerJoin.get("library"), storageJoin.get("library")));
+//        }
+//        else predicates.add(criteriaBuilder.notEqual(readerJoin.get("library"), storageJoin.get("library")));
+//
+//        if (start != null) {
+//            predicates.add(criteriaBuilder.greaterThan(root.get("dateGive"), start));
+//        }
+//        if (finish != null) {
+//            predicates.add(criteriaBuilder.lessThan(root.get("dateGive"), finish));
+//        }
+        query.where(criteriaBuilder.and(predicates.toArray(new Predicate[predicates.size()])));
+        query.orderBy(criteriaBuilder.asc(root.get("id")));
+        List<Edition> resEdition = entityManager.createQuery(query).getResultList();
+        entityManager.getTransaction().commit();
+        entityManager.close();
+        return resEdition;
+    }
+
     public List<Edition> findEditionByAuthor(Author author) {
         return author == null ? new ArrayList<Edition>() : editionRepository.findEditionByAuthor(author.getId());
     }
