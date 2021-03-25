@@ -1,6 +1,7 @@
 package com.bdcourse.library.reader;
 
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.jpa.repository.query.Procedure;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 
@@ -75,15 +76,16 @@ public interface ReaderRepository extends CrudRepository<Reader, Integer> {
                                           @Param("finish") LocalDate finish);
 
     //10 query
-    @Query(value = "SELECT \n" +
-            "    r.* , 0 AS clazz_\n" +
-            "FROM \n" +
-            "    library_schema.reader r \n" +
-            "    JOIN library_schema.distribution d ON d.reader_id = r.reader_id \n" +
-            "    JOIN library_schema.edition e ON d.edition_id = e.edition_id \n" +
-            "    JOIN library_schema.outdoor o ON o.edition_id = e.edition_id \n" +
-            "WHERE \n" +
-            "    d.date_give + o.rental_period < NOW ()", nativeQuery = true)
+//    @Query(value = "SELECT \n" +
+//            "    r.* , 0 AS clazz_\n" +
+//            "FROM \n" +
+//            "    library_schema.reader r \n" +
+//            "    JOIN library_schema.distribution d ON d.reader_id = r.reader_id \n" +
+//            "    JOIN library_schema.edition e ON d.edition_id = e.edition_id \n" +
+//            "    JOIN library_schema.outdoor o ON o.edition_id = e.edition_id \n" +
+//            "WHERE \n" +
+//            "    d.date_give + o.rental_period < NOW ()", nativeQuery = true)
+    @Query(value = "SELECT *, 0 AS clazz_ FROM library_schema.some_function()", nativeQuery = true)
     List<Reader> findReaderExpired();
 
     //13 query
