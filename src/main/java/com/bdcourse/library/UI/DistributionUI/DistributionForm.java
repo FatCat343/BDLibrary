@@ -22,6 +22,8 @@ import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.data.binder.ValidationException;
 import com.vaadin.flow.shared.Registration;
 
+import java.time.LocalDate;
+
 public class DistributionForm extends VerticalLayout {
     DatePicker dateGive = new DatePicker("Give Date");
     DatePicker dateReturn = new DatePicker("Return Date");
@@ -54,6 +56,23 @@ public class DistributionForm extends VerticalLayout {
     }
 
     private HorizontalLayout createFieldsLayout() {
+        dateGive.addValueChangeListener(event -> {
+            LocalDate selected = event.getValue();
+            if (selected != null) {
+                dateReturn.setMin(selected.plusDays(1));
+            } else {
+                dateReturn.setMin(null);
+            }
+        });
+        dateReturn.addValueChangeListener(event -> {
+            LocalDate selected = event.getValue();
+            if (selected != null) {
+                dateGive.setMax(selected.minusDays(1));
+            } else {
+                dateGive.setMax(null);
+            }
+            //updateList();
+        });
         return new HorizontalLayout(edition, reader, staff, dateGive, dateReturn);
     }
 

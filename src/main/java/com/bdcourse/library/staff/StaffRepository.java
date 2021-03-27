@@ -2,9 +2,11 @@ package com.bdcourse.library.staff;
 
 import com.bdcourse.library.storage.Storage;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.jpa.repository.query.Procedure;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 
+import java.math.BigInteger;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -38,6 +40,10 @@ public interface StaffRepository extends CrudRepository<Staff, Integer> {
             "ORDER BY \n" +
             "\ts.staff_id ASC", nativeQuery = true)
     List<Object[]> findStaffProductivityByDate(@Param("start")LocalDate start, @Param("finish") LocalDate finish);
+
+    //@Procedure(value = "library_schema.mvp_staff", outputParameterName = "_val")
+    @Query(value = "call library_schema.mvp_staff()", nativeQuery = true)
+    String findMostProductiveStaff();
 //
 //    //12 query
 //    List<Staff> findStaffByStorage();

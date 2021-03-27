@@ -4,6 +4,7 @@ import com.bdcourse.library.storage.Storage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigInteger;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -36,6 +37,10 @@ public class StaffService {
     public List<Object[]> findStaffProductivityByDate(LocalDate start, LocalDate finish) {
         System.out.println("start = " + start + ", finish = " + finish);
         return staffRepository.findStaffProductivityByDate(start, finish);
+    }
+
+    public String findMostProductiveStaff(){
+        return staffRepository.findMostProductiveStaff();
     }
 
     public List<Staff> findAllByStorage(Storage storage) {

@@ -22,6 +22,8 @@ import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.data.binder.ValidationException;
 import com.vaadin.flow.shared.Registration;
 
+import java.time.LocalDate;
+
 public class OutdoorEditionForm extends VerticalLayout {
     private IntegerField rentalPeriod = new IntegerField("Rental Period in Days");
     private IntegerField code = new IntegerField("Edition Code");
@@ -57,6 +59,23 @@ public class OutdoorEditionForm extends VerticalLayout {
         outdoorEditionBinder.forField(dateArrived)
                 .asRequired("Required Field")
                 .bind(OutdoorEdition::getDateArrived, OutdoorEdition::setDateArrived);
+        dateArrived.addValueChangeListener(event -> {
+            LocalDate selected = event.getValue();
+            if (selected != null) {
+                dateLeft.setMin(selected.plusDays(1));
+            } else {
+                dateLeft.setMin(null);
+            }
+        });
+        dateLeft.addValueChangeListener(event -> {
+            LocalDate selected = event.getValue();
+            if (selected != null) {
+                dateArrived.setMax(selected.minusDays(1));
+            } else {
+                dateArrived.setMax(null);
+            }
+            //updateList();
+        });
         publication.setItems(publicationService.findAll());
         position.setItems(bookPositionService.findAllFetch());
         add(createFieldsLayout(), createButtonsLayout());
